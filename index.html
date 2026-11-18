@@ -1,0 +1,1694 @@
+<title>SMM Business CRM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: SaaS shell — black sidebar on the left, sticky top bar with global search, scrolling work area. Monochrome ink with semantic status colours only. */
+:root{
+  --bg:#f5f5f3; --surface:#ffffff; --surface-2:#f0f0ed; --surface-3:#e9e9e5;
+  --line:#e3e3df; --line-strong:#cfcfca;
+  --ink:#0f0f0e; --ink-2:#55554f; --ink-3:#8b8b84;
+  --accent:#0f0f0e; --accent-ink:#ffffff;
+  --side-bg:#0f0f0e; --side-ink:#ededea; --side-ink-2:#9a9a94; --side-hover:#1d1d1b; --side-active:#2a2a27; --side-line:#232321;
+  --ok:#1d7a3b; --ok-soft:#e5f3e9; --warn:#9a5b00; --warn-soft:#fbf0dc; --bad:#c0362f; --bad-soft:#fbe7e5; --info:#2a62b8; --info-soft:#e6eefa;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --bar:#2c2c29; --bar-2:#a9a9a2;
+  --shadow:0 1px 2px rgba(15,15,14,.05),0 8px 24px rgba(15,15,14,.06);
+  --overlay:rgba(15,15,14,.38);
+  --f-ui:"Geist","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r:10px; --r-sm:7px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b0b0a; --surface:#141413; --surface-2:#1b1b1a; --surface-3:#232321;
+  --line:#252523; --line-strong:#353532;
+  --ink:#f1f1ee; --ink-2:#b4b4ad; --ink-3:#7d7d77;
+  --accent:#f1f1ee; --accent-ink:#0b0b0a;
+  --side-bg:#080807; --side-ink:#ededea; --side-ink-2:#8e8e88; --side-hover:#161615; --side-active:#22221f; --side-line:#1d1d1b;
+  --ok:#55c374; --ok-soft:#14261a; --warn:#e3a33a; --warn-soft:#2a1f0d; --bad:#f07a73; --bad-soft:#2c1514; --info:#6aa3ef; --info-soft:#121d2d;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --bar:#d6d6d0; --bar-2:#5c5c57;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --overlay:rgba(0,0,0,.6); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0b0b0a; --surface:#141413; --surface-2:#1b1b1a; --surface-3:#232321;
+  --line:#252523; --line-strong:#353532;
+  --ink:#f1f1ee; --ink-2:#b4b4ad; --ink-3:#7d7d77;
+  --accent:#f1f1ee; --accent-ink:#0b0b0a;
+  --side-bg:#080807; --side-ink:#ededea; --side-ink-2:#8e8e88; --side-hover:#161615; --side-active:#22221f; --side-line:#1d1d1b;
+  --ok:#55c374; --ok-soft:#14261a; --warn:#e3a33a; --warn-soft:#2a1f0d; --bad:#f07a73; --bad-soft:#2c1514; --info:#6aa3ef; --info-soft:#121d2d;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --bar:#d6d6d0; --bar-2:#5c5c57;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --overlay:rgba(0,0,0,.6); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--info);outline-offset:2px;border-radius:4px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+
+/* Shell */
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:0;height:100vh;height:100dvh;background:var(--side-bg);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 12px;padding-left:max(12px,env(safe-area-inset-left,0px));border-right:1px solid var(--side-line);z-index:40}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px}
+.brand-mark{width:32px;height:32px;border-radius:8px;background:var(--side-ink);color:var(--side-bg);display:grid;place-items:center;font-weight:700;font-size:12px;letter-spacing:.04em}
+.brand b{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em}
+.brand small{display:block;color:var(--side-ink-2);font-size:11.5px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--side-ink-2);padding:14px 10px 6px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--side-ink-2);font-size:13.5px;font-weight:500}
+.nav a svg{width:17px;height:17px;flex:none}
+.nav a:hover{background:var(--side-hover);color:var(--side-ink)}
+.nav a.active{background:var(--side-active);color:var(--side-ink)}
+.nav .badge{margin-left:auto;font-size:11px;font-family:var(--f-mono);padding:1px 7px;border-radius:99px;background:var(--side-active);color:var(--side-ink)}
+.nav .badge.alert{background:#c0362f;color:#fff}
+.side-foot{margin-top:auto;padding:12px 10px 0;border-top:1px solid var(--side-line);font-size:12px;color:var(--side-ink-2);display:flex;flex-direction:column;gap:8px}
+.store-chip{display:flex;align-items:center;gap:8px;color:var(--side-ink);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.ok{background:#3fb763}.dot.warn{background:#e3a33a}.dot.bad{background:#e5534b}
+.side-foot a{color:var(--side-ink-2)}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding-block:10px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.btn.menu-btn{display:none}
+.search{position:relative;flex:1;max-width:520px}
+.search input{width:100%;height:38px;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:0 12px 0 36px;outline:none}
+.search input:focus{border-color:var(--line-strong);background:var(--surface)}
+.search>svg{position:absolute;left:11px;top:11px;width:16px;height:16px;color:var(--ink-3)}
+.search kbd{position:absolute;right:10px;top:9px;font-family:var(--f-mono);font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:1px 6px;background:var(--surface)}
+.search-results{position:absolute;top:44px;left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);max-height:420px;overflow:auto;padding:6px;z-index:50}
+.sr-group{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);padding:8px 8px 4px}
+.sr-item{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;padding:8px;border-radius:7px;cursor:pointer}
+.sr-item:hover,.sr-item.sel{background:var(--surface-2)}
+.sr-item small{color:var(--ink-3);display:block}
+.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.content{padding-block:24px 64px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));min-width:0}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.page-head h1{font-size:24px;letter-spacing:-.02em;margin:0;font-weight:600;text-wrap:balance}
+.page-head p{margin:4px 0 0;color:var(--ink-2);max-width:68ch}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Buttons & inputs */
+.btn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;font-weight:500;font-size:13.5px;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--surface-2)}
+.btn svg{width:16px;height:16px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{opacity:.88}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.btn.danger.solid{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.sm{height:30px;padding:0 10px;font-size:12.5px;border-radius:7px}
+.btn.icon{width:32px;padding:0;justify-content:center;height:32px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.input,.select,textarea.input{height:36px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);padding:0 10px;outline:none;min-width:0}
+textarea.input{height:auto;min-height:90px;padding:9px 10px;resize:vertical;line-height:1.45}
+.input:focus,.select:focus{border-color:var(--ink-2)}
+.select{padding-right:28px;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);background-position:calc(100% - 15px) 15px,calc(100% - 10px) 15px;background-size:5px 5px;background-repeat:no-repeat}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar .input{flex:1 1 220px;max-width:340px}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--ink-2);font-weight:500}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg .c{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin-left:4px}
+
+/* Cards, KPIs */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 0}
+.card-h h2,.card-h h3{font-size:14px;margin:0;font-weight:600;letter-spacing:-.005em}
+.card-h .sub{color:var(--ink-3);font-size:12px}
+.card-b{padding:14px 16px 16px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.kpi{background:var(--surface);padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.kpi .l{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:22px;font-weight:600;letter-spacing:-.02em;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .h{font-size:11.5px;color:var(--ink-3)}
+.kpi.hl .v{color:var(--bad)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.chart{width:100%;min-height:220px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart-empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink-3);font-size:13px;text-align:center;padding:20px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.funnel{display:flex;flex-direction:column;gap:7px}
+.f-row{display:grid;grid-template-columns:150px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:12.5px}
+.f-bar{height:20px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.f-bar span{display:block;height:100%;background:var(--bar);border-radius:0 4px 4px 0;min-width:2px}
+.f-row.lost .f-bar span{background:var(--bar-2)}
+.f-row .n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.welcome{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;padding:22px;margin-bottom:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.welcome h2{margin:0 0 6px;font-size:19px;letter-spacing:-.015em}
+.welcome p{margin:0;color:var(--ink-2);max-width:60ch}
+.welcome ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.welcome li{display:flex;gap:10px;align-items:center;counter-increment:s}
+.welcome li::before{content:counter(s);width:22px;height:22px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;font-size:11px;font-family:var(--f-mono);flex:none;color:var(--ink-2)}
+
+/* Lists & tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-weight:500;color:var(--ink-2);font-size:12px;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2);position:sticky;top:0}
+.tbl th.sortable{cursor:pointer;user-select:none}
+.tbl th.sortable:hover{color:var(--ink)}
+.tbl th .arr{font-size:10px;margin-left:3px;color:var(--ink)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover td{background:var(--surface-2)}
+.tbl .r{text-align:right}
+.tbl td.r,.tbl .money{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl .muted{color:var(--ink-3)}
+.tbl .acts{white-space:nowrap;text-align:right}
+.cell-main{font-weight:500}
+.cell-sub{color:var(--ink-3);font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:99px;background:var(--surface-3);color:var(--ink-2);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.info{background:var(--info-soft);color:var(--info)}
+.pill.dark{background:var(--ink);color:var(--surface)}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-2)}
+.empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.empty .row{justify-content:center;margin-top:14px}
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 16px;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li .t{font-weight:500}
+.li .s{font-size:12px;color:var(--ink-3)}
+.li .ico{width:32px;height:32px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;color:var(--ink-2)}
+.li .ico svg{width:16px;height:16px}
+.li.over .ico{background:var(--bad-soft);color:var(--bad)}
+.li.done .t{text-decoration:line-through;color:var(--ink-3)}
+.li-click{cursor:pointer}
+.li-click:hover{background:var(--surface-2)}
+.sumbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.sumbar>div{background:var(--surface);padding:12px 16px}
+.sumbar .l{font-size:12px;color:var(--ink-2)}
+.sumbar .v{font-family:var(--f-mono);font-size:19px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sumbar .h{font-size:11.5px;color:var(--ink-3)}
+.note{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:9px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);font-size:12.5px;margin-bottom:16px}
+.note svg{width:16px;height:16px;flex:none;margin-top:1px}
+.note.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.note.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.note b{color:inherit}
+
+/* Kanban */
+.kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;align-items:flex-start;min-height:60vh}
+.col{flex:0 0 268px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;max-height:calc(100vh - 200px)}
+.col-h{padding:12px 12px 8px;display:flex;flex-direction:column;gap:2px;border-bottom:1px solid var(--line)}
+.col-h .t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px}
+.col-h .t .n{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);font-weight:500;margin-left:auto}
+.col-h .v{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2)}
+.col-b{padding:8px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:80px;flex:1}
+.col.over{outline:2px dashed var(--ink-3);outline-offset:-3px}
+.kc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 10px 8px;cursor:grab;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+.kc:hover{border-color:var(--line-strong)}
+.kc.dragging{opacity:.4}
+.kc .t{font-weight:600;font-size:13px;line-height:1.3}
+.kc .s{font-size:12px;color:var(--ink-3)}
+.kc .m{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.kc .val{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.kc .mv{display:flex;gap:2px}
+.kc .mv button{border:0;background:var(--surface-2);width:24px;height:22px;border-radius:5px;cursor:pointer;color:var(--ink-2);display:grid;place-items:center}
+.kc .mv button:hover{background:var(--surface-3);color:var(--ink)}
+.kc .mv svg{width:13px;height:13px}
+.stage-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+
+/* Calendar */
+.cal-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.cal-head h2{margin:0 8px 0 0;font-size:17px;font-weight:600;text-transform:capitalize;min-width:150px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--line);gap:1px}
+.cal .dow{background:var(--surface-2);font-size:11.5px;color:var(--ink-2);padding:7px 8px;font-weight:500}
+.cal .day{background:var(--surface);min-height:104px;padding:6px;display:flex;flex-direction:column;gap:3px;cursor:pointer;min-width:0}
+.cal .day:hover{background:var(--surface-2)}
+.cal .day.out{background:var(--bg);color:var(--ink-3)}
+.cal .day .dn{font-size:12px;font-family:var(--f-mono);color:var(--ink-2);display:flex;justify-content:space-between}
+.cal .day.today .dn b{background:var(--ink);color:var(--surface);border-radius:5px;padding:0 5px}
+.ev{font-size:11.5px;border-radius:5px;padding:2px 6px;background:var(--ink);color:var(--surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:0;text-align:left;cursor:pointer;width:100%}
+.ev.fu{background:var(--surface-3);color:var(--ink-2)}
+.ev.cancel{background:var(--surface-2);color:var(--ink-3);text-decoration:line-through}
+.ev.donee{background:var(--ok-soft);color:var(--ok)}
+.ev-more{font-size:11px;color:var(--ink-3)}
+
+/* Drawer / modal */
+.overlay{position:fixed;inset:0;background:var(--overlay);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px 16px;overflow-y:auto}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:100%;max-width:640px;display:flex;flex-direction:column}
+.modal.wide{max-width:860px}
+.modal.small{max-width:440px}
+.modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal-h h3{margin:0;font-size:16px;font-weight:600}
+.modal-b{padding:18px 20px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--line);flex-wrap:wrap}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld.wide{grid-column:1/-1}
+.fld label{font-size:12px;color:var(--ink-2);font-weight:500}
+.fld label .req{color:var(--bad)}
+.fld .err{font-size:11.5px;color:var(--bad);min-height:0}
+.fld.has-err .input,.fld.has-err .select{border-color:var(--bad)}
+.fld .hint{font-size:11.5px;color:var(--ink-3)}
+.form-sec{grid-column:1/-1;font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+.form-sec:first-child{border-top:0;padding-top:0;margin-top:0}
+.drawer-wrap{position:fixed;inset:0;z-index:55;background:var(--overlay);display:flex;justify-content:flex-end}
+.drawer{width:min(620px,100%);height:100%;background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.drawer-h{padding:18px 20px 14px;padding-top:calc(18px + env(safe-area-inset-top,0px));border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.drawer-h .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.drawer-h h2{margin:0;font-size:20px;letter-spacing:-.015em;font-weight:600;overflow-wrap:anywhere}
+.drawer-h .meta{color:var(--ink-2);font-size:13px}
+.drawer-b{flex:1;overflow-y:auto;padding:18px 20px 40px;padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+.sec h4{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.kv div{min-width:0}
+.kv dt{font-size:11.5px;color:var(--ink-3);margin:0}
+.kv dd{margin:2px 0 0;overflow-wrap:anywhere;display:flex;gap:6px;align-items:center}
+.copy{border:0;background:none;color:var(--ink-3);cursor:pointer;padding:2px;border-radius:4px;display:inline-grid}
+.copy:hover{color:var(--ink);background:var(--surface-2)}
+.copy svg{width:13px;height:13px}
+.notes-box{white-space:pre-wrap;background:var(--surface-2);border-radius:8px;padding:12px;font-size:13px;color:var(--ink-2)}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:1px solid var(--line-strong);margin-left:4px}
+.timeline div{position:relative;padding:0 0 12px 16px;font-size:12.5px}
+.timeline div::before{content:"";position:absolute;left:-5px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--ink-2)}
+.timeline small{color:var(--ink-3);display:block}
+.mini{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.mini .li{padding:9px 12px}
+.progress{height:8px;border-radius:99px;background:var(--surface-3);overflow:hidden;display:flex}
+.progress span{display:block;height:100%;background:var(--ok)}
+.progress span+span{background:var(--s1)}
+.next-box{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:9px}
+.next-box svg{width:18px;height:18px;color:var(--ink-2);flex:none}
+
+.toasts{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px;z-index:90;max-width:min(380px,calc(100vw - 32px))}
+.toast{background:var(--ink);color:var(--surface);padding:10px 14px;border-radius:9px;font-size:13px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.bad{background:var(--bad);color:#fff}
+.toast button{margin-left:auto;background:transparent;border:1px solid currentColor;color:inherit;border-radius:6px;padding:2px 8px;cursor:pointer;font-size:12px}
+.tip{position:fixed;z-index:95;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;padding:7px 10px;border-radius:7px;box-shadow:var(--shadow);max-width:260px;line-height:1.4}
+.tip b{font-weight:600}
+.tip .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.menu{position:absolute;right:0;top:42px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:6px;min-width:210px;z-index:50}
+.menu button{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:8px 10px;border-radius:7px;cursor:pointer;text-align:left;font-size:13.5px}
+.menu button:hover{background:var(--surface-2)}
+.menu svg{width:16px;height:16px;color:var(--ink-2)}
+.loading{display:grid;place-items:center;min-height:50vh;color:var(--ink-3);gap:10px}
+.spinner{width:22px;height:22px;border:2px solid var(--line-strong);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.data-grid ul{margin:8px 0 0;padding-left:18px;color:var(--ink-2)}
+.data-grid li{margin-bottom:4px}
+.csv-tbl td,.csv-tbl th{padding:6px 10px}
+.import-errs{max-height:160px;overflow:auto;font-size:12px;color:var(--bad);background:var(--bad-soft);border-radius:8px;padding:8px 12px;margin-top:10px}
+.backdrop-side{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+@media (max-width:1280px){.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-3{grid-template-columns:1fr}}
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;width:268px;transform:translateX(-100%);transition:transform .2s;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none}
+  .backdrop-side.open{display:block;position:fixed;inset:0;background:var(--overlay);z-index:35}
+  .btn.menu-btn{display:inline-flex}
+  .grid-2,.data-grid,.welcome{grid-template-columns:1fr}
+  .sumbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .search kbd{display:none}
+}
+@media (max-width:640px){
+  .topbar{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:8px}
+  .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 64px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi .v{font-size:19px}
+  .form,.kv{grid-template-columns:1fr}
+  .f-row{grid-template-columns:96px minmax(0,1fr) 70px;font-size:12px}
+  .cal .day{min-height:64px;padding:4px}
+  .cal .ev{font-size:0;height:6px;padding:0}
+  .new-label{display:none}
+  .page-head h1{font-size:21px}
+  .overlay{padding:16px 8px}
+  .col{flex-basis:240px}
+}
+</style>
+
+<div class="app" id="app">
+  <aside class="side" id="side" aria-label="Navigazione principale">
+    <div class="brand">
+      <div class="brand-mark">SMM</div>
+      <div><b>SMM Business CRM</b><small>Morgan Acanfora</small></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot" id="sideFoot"></div>
+  </aside>
+  <div class="backdrop-side" id="sideBackdrop"></div>
+  <div class="main">
+    <header class="topbar">
+      <button class="btn icon ghost menu-btn" id="menuBtn" aria-label="Apri menu"></button>
+      <div class="search" id="searchBox">
+        <span id="searchIcon"></span>
+        <input id="globalSearch" type="search" placeholder="Cerca aziende, referenti, email, preventivi…" autocomplete="off" aria-label="Ricerca globale">
+        <kbd>/</kbd>
+        <div class="search-results" id="searchResults" hidden></div>
+      </div>
+      <div class="top-actions" style="position:relative">
+        <button class="btn primary" id="newBtn" aria-haspopup="true"><span id="newIco"></span><span class="new-label">Nuovo</span></button>
+        <div class="menu" id="newMenu" hidden></div>
+      </div>
+    </header>
+    <main class="content" id="view"><div class="loading"><div class="spinner"></div>Caricamento dati…</div></main>
+  </div>
+</div>
+<div id="drawerRoot"></div>
+<div id="modalRoot"></div>
+<div id="confirmRoot"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------------- Icons ---------------- */
+const IC = {
+  dash:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z"/>',
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  kanban:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7v7M12 7v4M16 7v9"/>',
+  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  brief:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
+  search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  down:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  left:'<path d="m15 18-6-6 6-6"/>',
+  right:'<path d="m9 18 6-6-6-6"/>',
+  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  cam:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>',
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+  alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3zM12 9v4M12 17h.01"/>',
+  euro:'<path d="M4 10h12M4 14h9M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>',
+  trophy:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z"/>',
+  msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  video:'<path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+  undo:'<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>',
+};
+const icon = (n, cls='') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+
+/* ---------------- Domain constants ---------------- */
+const STAGES = [
+  {k:'nuovo',l:'Nuovo lead'},{k:'da_contattare',l:'Da contattare'},{k:'contattato',l:'Contattato'},
+  {k:'interessato',l:'Interessato'},{k:'appuntamento',l:'Appuntamento fissato'},{k:'preventivo',l:'Preventivo inviato'},
+  {k:'negoziazione',l:'Negoziazione'},{k:'vinto',l:'Vinto'},{k:'perso',l:'Perso'}];
+const SIDX = Object.fromEntries(STAGES.map((s,i)=>[s.k,i]));
+const stageLabel = k => (STAGES[SIDX[k]]||{}).l || k || '—';
+const OPEN_STAGES = ['interessato','appuntamento','preventivo','negoziazione'];
+const SOURCES = ['Instagram','Facebook','LinkedIn','TikTok','Google','Sito web','Passaparola','Referral cliente','Evento / networking','Contatto diretto','Email','Telefonata a freddo','Altro'];
+const SERVICES = ['Sito web','E-commerce','Landing page','Branding','Logo e identità visiva','Social media management','Advertising (Meta / Google)','SEO','Content e copywriting','Consulenza digital marketing','Manutenzione sito','Pacchetto completo','Altro'];
+const FU_TYPES = ['Telefonata','Email','WhatsApp','Messaggio Instagram','Videochiamata','Incontro','Altro'];
+const FU_STATUS = [{k:'da_fare',l:'Da fare'},{k:'completato',l:'Completato'},{k:'annullato',l:'Annullato'}];
+const AP_TYPES = ['In presenza','Presso il cliente','Videochiamata','Telefonata','Altro'];
+const AP_STATUS = [{k:'programmato',l:'Programmato'},{k:'svolto',l:'Svolto'},{k:'rinviato',l:'Rinviato'},{k:'annullato',l:'Annullato'}];
+const AP_OUTCOME = ['','Positivo – richiesta preventivo','Positivo – da ricontattare','Da valutare','Non interessato','Cliente assente'];
+const Q_STATUS = [{k:'preparazione',l:'In preparazione'},{k:'inviato',l:'Inviato'},{k:'accettato',l:'Accettato'},{k:'rifiutato',l:'Rifiutato'}];
+const P_STATUS = ['Da avviare','In corso','In revisione','Completato','In pausa'];
+const MONTHS = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+const lbl = (list,k) => (list.find(x=>x.k===k)||{}).l || k || '—';
+
+const F = (key,label,type='text',o={}) => Object.assign({key,label,type},o);
+const SCHEMA = {
+  contacts:{name:'Contatti',one:'contatto',fields:[
+    F('_s1','Azienda e referente','section'),
+    F('company','Nome azienda','text',{req:true}),
+    F('contactName','Nome referente'),
+    F('phone','Telefono','tel'),
+    F('email','Email','email'),
+    F('website','Sito web','url',{ph:'www.esempio.it'}),
+    F('instagram','Profilo Instagram','text',{ph:'@nomeprofilo'}),
+    F('sector','Settore','text',{list:'sector',ph:'es. Ristorazione'}),
+    F('location','Località','text',{list:'location',ph:'es. Napoli'}),
+    F('_s2','Opportunità','section'),
+    F('source','Fonte del contatto','select',{options:SOURCES}),
+    F('service','Servizio di interesse','select',{options:SERVICES}),
+    F('budget','Budget indicativo (€)','money'),
+    F('potentialValue','Valore potenziale (€)','money'),
+    F('stage','Fase pipeline','stage',{def:'nuovo'}),
+    F('acquisitionDate','Data di acquisizione','date',{req:true,def:()=>todayISO()}),
+    F('_s3','Attività','section'),
+    F('lastContact','Ultimo contatto','date'),
+    F('nextActionDate','Data prossima azione','date'),
+    F('nextAction','Prossima azione','text',{wide:true,ph:'es. Inviare proposta grafica'}),
+    F('notes','Note commerciali','textarea',{wide:true}),
+  ]},
+  followups:{name:'Follow-up',one:'follow-up',fields:[
+    F('contactId','Cliente','contact',{req:true}),
+    F('type','Tipo di contatto','select',{options:FU_TYPES,req:true,def:'Telefonata'}),
+    F('date','Data','date',{req:true,def:()=>todayISO()}),
+    F('time','Ora','time'),
+    F('status','Stato','status',{options:FU_STATUS,def:'da_fare'}),
+    F('description','Descrizione','textarea',{wide:true,ph:'Cosa devi fare o dire'}),
+  ]},
+  appointments:{name:'Appuntamenti',one:'appuntamento',fields:[
+    F('contactId','Cliente','contact',{req:true}),
+    F('meetingType','Tipologia di incontro','select',{options:AP_TYPES,req:true,def:'Videochiamata'}),
+    F('date','Data','date',{req:true,def:()=>todayISO()}),
+    F('time','Ora','time',{req:true,def:'10:00'}),
+    F('place','Luogo / link','text',{wide:true}),
+    F('status','Stato','status',{options:AP_STATUS,def:'programmato'}),
+    F('outcomeTag','Esito','select',{options:AP_OUTCOME}),
+    F('notes','Note','textarea',{wide:true}),
+    F('outcome','Esito dell\'incontro (dettagli)','textarea',{wide:true}),
+  ]},
+  quotes:{name:'Preventivi',one:'preventivo',fields:[
+    F('contactId','Cliente','contact',{req:true}),
+    F('number','Numero preventivo','text',{ph:'es. 2026-014'}),
+    F('service','Servizio proposto','select',{options:SERVICES,req:true}),
+    F('amount','Importo (€)','money',{req:true}),
+    F('status','Stato','status',{options:Q_STATUS,def:'preparazione'}),
+    F('sentDate','Data di invio','date'),
+    F('expiryDate','Scadenza','date'),
+    F('notes','Note','textarea',{wide:true}),
+  ]},
+  clients:{name:'Clienti acquisiti',one:'cliente acquisito',fields:[
+    F('_s1','Dati aziendali','section'),
+    F('contactId','Collega a un contatto','contact',{hint:'Facoltativo: collega il cliente alla scheda del lead'}),
+    F('company','Ragione sociale / azienda','text',{req:true}),
+    F('contactName','Referente'),
+    F('vat','Partita IVA / C.F.'),
+    F('email','Email','email'),
+    F('phone','Telefono','tel'),
+    F('address','Indirizzo','text',{wide:true}),
+    F('_s2','Contratto','section'),
+    F('services','Servizi acquistati','text',{req:true,wide:true,ph:'es. Sito web + gestione social 6 mesi'}),
+    F('agreedAmount','Importo concordato (€)','money',{req:true}),
+    F('acquisitionDate','Data di acquisizione','date',{req:true,def:()=>todayISO()}),
+    F('projectStatus','Stato del progetto','select',{options:P_STATUS,def:'Da avviare'}),
+    F('_s3','Incassi effettivi','section'),
+    F('deposit','Acconto ricevuto (€)','money',{hint:'Solo denaro già incassato'}),
+    F('depositDate','Data acconto','date'),
+    F('balance','Saldo ricevuto (€)','money',{hint:'Solo denaro già incassato'}),
+    F('balanceDate','Data saldo','date'),
+    F('notes','Note','textarea',{wide:true}),
+  ]},
+};
+const COLLS = Object.keys(SCHEMA);
+
+/* ---------------- Utils ---------------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const pad = n => String(n).padStart(2,'0');
+const isoOf = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayISO = () => isoOf(new Date());
+const nowISO = () => new Date().toISOString();
+const nowHM = () => { const d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes()); };
+function parseISO(s){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||''); if(!m) return null; const d=new Date(+m[1],+m[2]-1,+m[3]); return (d.getMonth()===+m[2]-1)?d:null; }
+function fmtDate(s,opt){ const d=parseISO(s); if(!d) return '—'; return d.toLocaleDateString('it-IT',opt||{day:'2-digit',month:'2-digit',year:'numeric'}); }
+const fmtDateLong = s => fmtDate(s,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+function daysTo(s){ const d=parseISO(s); if(!d) return null; return Math.round((d-parseISO(todayISO()))/86400000); }
+function relDay(n){ if(n==null) return ''; if(n<-1) return `Scaduto da ${-n} gg`; if(n===-1) return 'Ieri'; if(n===0) return 'Oggi'; if(n===1) return 'Domani'; return `Tra ${n} gg`; }
+function addDays(iso,n){ const d=parseISO(iso); d.setDate(d.getDate()+n); return isoOf(d); }
+const eur0 = new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0,minimumFractionDigits:0});
+const eur2 = new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2});
+const num0 = new Intl.NumberFormat('it-IT');
+function money(v){ v=+v||0; return (Number.isInteger(v)?eur0:eur2).format(v); }
+function moneyShort(v){ v=+v||0; const a=Math.abs(v); if(a>=1e6) return (v/1e6).toLocaleString('it-IT',{maximumFractionDigits:1})+' M€'; if(a>=1e3) return (v/1e3).toLocaleString('it-IT',{maximumFractionDigits:1})+'k €'; return Math.round(v)+' €'; }
+const pct = v => (isFinite(v)?(v*100).toLocaleString('it-IT',{maximumFractionDigits:1}):'0')+'%';
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const keyNorm = s => norm(s).replace(/[^a-z0-9]/g,'');
+function parseNum(v){
+  if(v==null) return NaN; if(typeof v==='number') return v;
+  let s=String(v).replace(/[€\s ]/g,'').replace(/eur/i,''); if(!s) return NaN;
+  const lc=s.lastIndexOf(','), ld=s.lastIndexOf('.');
+  if(lc>-1 && ld>-1){ if(lc>ld) s=s.replace(/\./g,'').replace(',','.'); else s=s.replace(/,/g,''); }
+  else if(lc>-1){ s=s.replace(/\./g,'').replace(',','.'); }
+  else if(ld>-1 && /^-?\d{1,3}(\.\d{3})+$/.test(s)){ s=s.replace(/\./g,''); }
+  const n=Number(s); return isFinite(n)?n:NaN;
+}
+function parseAnyDate(v){
+  v=String(v||'').trim(); if(!v) return '';
+  if(parseISO(v)) return v;
+  let m=/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/.exec(v);
+  if(m){ let y=+m[3]; if(y<100) y+=2000; const s=y+'-'+pad(m[2])+'-'+pad(m[1]); return parseISO(s)?s:null; }
+  m=/^(\d{4})-(\d{2})-(\d{2})[T ]/.exec(v); if(m) return m[1]+'-'+m[2]+'-'+m[3];
+  return null;
+}
+const urlOf = s => { s=String(s||'').trim(); if(!s) return ''; return /^https?:\/\//i.test(s)?s:'https://'+s; };
+const igUrl = s => { s=String(s||'').trim(); if(!s) return ''; if(/instagram\.com/i.test(s)) return urlOf(s); return 'https://instagram.com/'+s.replace(/^@/,''); };
+const igHandle = s => { s=String(s||'').trim(); const m=/instagram\.com\/([^/?#]+)/i.exec(s); return m?'@'+m[1]:(s&&!s.startsWith('@')?'@'+s:s); };
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ---------------- Store ---------------- */
+const LS_KEY = 'smm-crm-data-v1';
+const S = { mode:'loading', db:null, data:{}, ready:false, loadWarn:false, readOnly:false, lsBroken:false, localPending:0 };
+COLLS.forEach(c=>S.data[c]=new Map());
+const all = c => [...S.data[c].values()];
+const get = (c,id) => S.data[c].get(id);
+
+function lsRead(){ try{ const raw=localStorage.getItem(LS_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+function lsWrite(){
+  if(S.mode!=='local') return;
+  const o={version:1,savedAt:nowISO()}; COLLS.forEach(c=>o[c]=all(c));
+  try{ localStorage.setItem(LS_KEY,JSON.stringify(o)); S.lsBroken=false; }
+  catch(e){ S.lsBroken=true; toast('Il browser non permette di salvare: esporta subito un backup dalla sezione Dati e backup.','bad'); }
+}
+function countLocal(){ const o=lsRead(); if(!o) return 0; return COLLS.reduce((n,c)=>n+((o[c]||[]).length),0); }
+
+async function initStore(){
+  let db=null;
+  try{ if(window.claude && typeof window.claude.use==='function') db=await window.claude.use('db'); }catch(e){ db=null; }
+  if(db){
+    S.mode='db'; S.db=db;
+    const pending=new Set(COLLS);
+    const timer=setTimeout(()=>{ if(pending.size){ S.loadWarn=true; S.ready=true; scheduleRender(); } },10000);
+    COLLS.forEach(c=>{
+      db.collection(c).onSnapshot(snap=>{
+        const m=new Map(); snap.docs.forEach(d=>{ if(d.exists){ m.set(d.id,Object.assign({},d.data(),{id:d.id})); } });
+        S.data[c]=m;
+        if(!snap.metadata.fromCache){ pending.delete(c); }
+        if(!pending.size){ clearTimeout(timer); S.loadWarn=false; S.ready=true; }
+        scheduleRender();
+      }, err=>{
+        pending.delete(c); S.dbError=err&&err.code||'unavailable'; S.ready=true;
+        if(!pending.size) clearTimeout(timer);
+        scheduleRender();
+      });
+    });
+  } else {
+    S.mode='local';
+    const o=lsRead();
+    if(o) COLLS.forEach(c=>(o[c]||[]).forEach(r=>{ if(r&&r.id) S.data[c].set(r.id,r); }));
+    S.ready=true; scheduleRender();
+  }
+}
+
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+async function dbCall(fn){
+  try{ return await fn(); }
+  catch(e){
+    if(e && e.code==='unavailable'){ await sleep(400+Math.random()*800); return await fn(); }
+    throw e;
+  }
+}
+function writeErrorMsg(e){
+  const c=e&&e.code;
+  if(c==='invalid_argument'){ S.readOnly=true; return 'Modifica non salvata: non hai i permessi di scrittura su questo CRM oppure i dati non sono validi.'; }
+  if(c==='quota_exceeded') return 'Spazio dell\'archivio esaurito: esporta un backup ed elimina i record non più necessari.';
+  if(c==='resource_exhausted') return 'Troppe operazioni ravvicinate: attendi qualche secondo e riprova.';
+  if(c==='revoked'||c==='not_granted') return 'Accesso all\'archivio non più disponibile in questa sessione. Ricarica la pagina.';
+  return 'Salvataggio non riuscito: controlla la connessione e riprova.';
+}
+async function saveRec(c, rec, {silent}={}){
+  rec = clone(rec);
+  if(!rec.id){ rec.id=uid(); rec.createdAt=nowISO(); }
+  rec.updatedAt = nowISO();
+  const prev = S.data[c].get(rec.id);
+  S.data[c].set(rec.id, rec); scheduleRender();
+  if(S.mode==='db'){
+    const body=clone(rec); delete body.id;
+    try{ await dbCall(()=>S.db.collection(c).doc(rec.id).set(body)); }
+    catch(e){ if(prev) S.data[c].set(rec.id,prev); else S.data[c].delete(rec.id); scheduleRender(); if(!silent) toast(writeErrorMsg(e),'bad'); throw e; }
+  } else lsWrite();
+  return rec;
+}
+async function delRec(c, id){
+  const prev = S.data[c].get(id);
+  S.data[c].delete(id); scheduleRender();
+  if(S.mode==='db'){
+    try{ await dbCall(()=>S.db.collection(c).doc(id).delete()); }
+    catch(e){ if(prev) S.data[c].set(id,prev); scheduleRender(); toast(writeErrorMsg(e),'bad'); throw e; }
+  } else lsWrite();
+}
+async function bulkSave(items, onProgress){
+  // items: [{c, rec}] — records already carry ids
+  let done=0, failed=0; const queue=[...items];
+  if(S.mode==='local'){
+    items.forEach(({c,rec})=>{ S.data[c].set(rec.id,rec); }); lsWrite(); scheduleRender(); return {done:items.length,failed:0};
+  }
+  async function worker(){
+    while(queue.length){
+      const {c,rec}=queue.shift(); const body=clone(rec); delete body.id;
+      S.data[c].set(rec.id,rec);
+      try{ await dbCall(()=>S.db.collection(c).doc(rec.id).set(body)); done++; }
+      catch(e){ failed++; S.data[c].delete(rec.id); if(e&&(e.code==='quota_exceeded'||e.code==='invalid_argument'||e.code==='revoked')){ S.lastBulkErr=writeErrorMsg(e); queue.length=0; } }
+      onProgress&&onProgress(done+failed, items.length);
+    }
+  }
+  await Promise.all([worker(),worker(),worker(),worker()]);
+  scheduleRender();
+  return {done,failed};
+}
+
+/* ---------------- Derived data ---------------- */
+function contactName(id){ const c=get('contacts',id); return c?c.company:'Contatto eliminato'; }
+const clientForContact = id => all('clients').find(x=>x.contactId===id);
+const outstanding = cl => Math.max(0,(+cl.agreedAmount||0)-(+cl.deposit||0)-(+cl.balance||0));
+const collected = cl => (+cl.deposit||0)+(+cl.balance||0);
+function isOverdueFU(f){ if(f.status!=='da_fare') return false; const n=daysTo(f.date); if(n==null) return false; if(n<0) return true; if(n===0 && f.time && f.time<nowHM()) return true; return false; }
+function isContacted(c){ return (SIDX[c.stage]>=2 && c.stage!=='perso') || !!c.lastContact || (c.stage==='perso' && (c.stageHistory||[]).some(h=>SIDX[h.stage]>=2 && h.stage!=='perso')); }
+function maxReach(c){
+  let m=-1; (c.stageHistory||[]).forEach(h=>{ const i=SIDX[h.stage]; if(i!=null && i<8 && i>m) m=i; });
+  const cur=SIDX[c.stage]; if(cur!=null && cur<8 && cur>m) m=cur;
+  return m;
+}
+function computeStats(){
+  const contacts=all('contacts'), fus=all('followups'), aps=all('appointments'), qs=all('quotes'), cls=all('clients');
+  const today=todayISO(), in7=addDays(today,7);
+  const won=contacts.filter(c=>c.stage==='vinto').length, lost=contacts.filter(c=>c.stage==='perso').length;
+  const openDeals=contacts.filter(c=>OPEN_STAGES.includes(c.stage));
+  const pipelineValue=contacts.filter(c=>c.stage!=='vinto'&&c.stage!=='perso').reduce((s,c)=>s+(+c.potentialValue||0),0);
+  const agreed=cls.reduce((s,c)=>s+(+c.agreedAmount||0),0);
+  const coll=cls.reduce((s,c)=>s+collected(c),0);
+  const quotesSent=qs.filter(q=>q.status!=='preparazione');
+  const apsActive=aps.filter(a=>a.status!=='annullato');
+  const apsUpcoming=aps.filter(a=>a.status==='programmato' && a.date>=today);
+  const due=dueItems(7);
+  return {
+    total:contacts.length, contacted:contacts.filter(isContacted).length,
+    appts:apsActive.length, apptsUpcoming:apsUpcoming.length,
+    quotesSent:quotesSent.length, quotesSentValue:quotesSent.reduce((s,q)=>s+(+q.amount||0),0),
+    openDeals:openDeals.length, openDealsValue:openDeals.reduce((s,c)=>s+(+c.potentialValue||0),0),
+    contracts:cls.length, won, lost,
+    pipelineValue, agreed, collected:coll, outstanding:cls.reduce((s,c)=>s+outstanding(c),0),
+    conv: contacts.length? won/contacts.length : 0,
+    winRate: (won+lost)? won/(won+lost) : 0,
+    due: due.length, overdue: due.filter(d=>d.days<0 || d.over).length,
+  };
+}
+function dueItems(horizon){
+  const today=todayISO(); const items=[];
+  all('followups').forEach(f=>{ if(f.status!=='da_fare') return; const d=daysTo(f.date); if(d==null||d>horizon) return;
+    items.push({kind:'fu',id:f.id,date:f.date,time:f.time,days:d,over:isOverdueFU(f),title:`${f.type||'Follow-up'} · ${contactName(f.contactId)}`,sub:f.description||'',ico:'bell'}); });
+  all('appointments').forEach(a=>{ if(a.status!=='programmato') return; const d=daysTo(a.date); if(d==null||d>horizon) return;
+    items.push({kind:'ap',id:a.id,date:a.date,time:a.time,days:d,over:d<0,title:`Appuntamento · ${contactName(a.contactId)}`,sub:(a.meetingType||'')+(d<0?' · esito da registrare':''),ico:'cal'}); });
+  all('quotes').forEach(q=>{ if(q.status!=='inviato'||!q.expiryDate) return; const d=daysTo(q.expiryDate); if(d==null||d>horizon) return;
+    items.push({kind:'q',id:q.id,date:q.expiryDate,days:d,over:d<0,title:`Preventivo in scadenza · ${contactName(q.contactId)}`,sub:`${q.service||''} · ${money(q.amount)}`,ico:'file'}); });
+  all('contacts').forEach(c=>{ if(!c.nextActionDate||c.stage==='vinto'||c.stage==='perso') return; const d=daysTo(c.nextActionDate); if(d==null||d>horizon) return;
+    items.push({kind:'c',id:c.id,date:c.nextActionDate,days:d,over:d<0,title:`${c.nextAction||'Prossima azione'} · ${c.company}`,sub:stageLabel(c.stage),ico:'flag'}); });
+  return items.sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+}
+function lastMonths(n){
+  const out=[]; const d=new Date(); d.setDate(1);
+  for(let i=n-1;i>=0;i--){ const x=new Date(d.getFullYear(),d.getMonth()-i,1); out.push({key:x.getFullYear()+'-'+pad(x.getMonth()+1),label:MONTHS[x.getMonth()],year:x.getFullYear(),m:x.getMonth()}); }
+  return out;
+}
+const mk = s => String(s||'').slice(0,7);
+
+/* ---------------- UI state ---------------- */
+const UI = {
+  view:'dashboard',
+  contacts:{q:'',sector:'',stage:'',source:'',sort:'acquisitionDate',dir:'desc'},
+  followups:{tab:'aperti',q:''},
+  appointments:{month:null,q:''},
+  quotes:{status:'',q:'',sort:'sentDate',dir:'desc'},
+  clients:{q:'',status:'',sort:'acquisitionDate',dir:'desc'},
+  drawer:null, // {type:'contact'|'client', id}
+};
+const VIEWS = [
+  {k:'dashboard',l:'Dashboard',i:'dash'},
+  {k:'contatti',l:'Lead e contatti',i:'users'},
+  {k:'pipeline',l:'Pipeline',i:'kanban'},
+  {k:'followup',l:'Follow-up',i:'bell'},
+  {k:'appuntamenti',l:'Appuntamenti',i:'cal'},
+  {k:'preventivi',l:'Preventivi',i:'file'},
+  {k:'clienti',l:'Clienti acquisiti',i:'brief'},
+  {k:'dati',l:'Dati e backup',i:'db'},
+];
+
+/* ---------------- Render loop ---------------- */
+let rq=0;
+function scheduleRender(){ if(rq) return; rq=requestAnimationFrame(()=>{ rq=0; renderAll(); }); }
+function renderAll(){
+  renderNav(); renderSideFoot();
+  if(!S.ready){ return; }
+  const view=$('#view');
+  const ae=document.activeElement; const fid=ae&&ae.id&&view.contains(ae)?ae.id:null;
+  const sel=fid&&('selectionStart' in ae)?[ae.selectionStart,ae.selectionEnd]:null;
+  const kb=$('.kanban',view); const kLeft=kb?kb.scrollLeft:0;
+  view.innerHTML = renderView();
+  const kb2=$('.kanban',view); if(kb2) kb2.scrollLeft=kLeft;
+  if(fid){ const el=document.getElementById(fid); if(el){ el.focus(); try{ if(sel) el.setSelectionRange(sel[0],sel[1]); }catch(e){} } }
+  afterRender();
+  renderDrawer();
+}
+function renderNav(){
+  const st=S.ready?computeStats():null;
+  const badges={contatti:st&&st.total, followup:st&&all('followups').filter(isOverdueFU).length};
+  $('#nav').innerHTML = `<div class="nav-label">Commerciale</div>` + VIEWS.map((v,i)=>{
+    let b='';
+    if(v.k==='followup' && badges.followup) b=`<span class="badge alert" title="Follow-up scaduti">${badges.followup}</span>`;
+    else if(v.k==='contatti' && badges.contatti) b=`<span class="badge">${badges.contatti}</span>`;
+    return (i===7?'<div class="nav-label">Archivio</div>':'')+`<a href="#${v.k}" class="${UI.view===v.k?'active':''}">${icon(v.i)}<span>${v.l}</span>${b}</a>`;
+  }).join('');
+}
+function renderSideFoot(){
+  let chip;
+  if(S.mode==='loading') chip='<span class="dot"></span>Connessione all\'archivio…';
+  else if(S.mode==='db') chip = S.dbError?'<span class="dot bad"></span>Archivio non raggiungibile' : S.loadWarn?'<span class="dot warn"></span>Archivio lento a rispondere':'<span class="dot ok"></span>Archivio claude.ai';
+  else chip = S.lsBroken?'<span class="dot bad"></span>Salvataggio non riuscito':'<span class="dot warn"></span>Solo questo browser';
+  $('#sideFoot').innerHTML = `<div class="store-chip">${chip}</div><a href="#dati">Dettagli salvataggio e backup</a>`;
+}
+function renderView(){
+  switch(UI.view){
+    case 'contatti': return vContacts();
+    case 'pipeline': return vPipeline();
+    case 'followup': return vFollowups();
+    case 'appuntamenti': return vAppointments();
+    case 'preventivi': return vQuotes();
+    case 'clienti': return vClients();
+    case 'dati': return vData();
+    default: return vDashboard();
+  }
+}
+function storageBanner(){
+  let h='';
+  if(S.mode==='local') h+=`<div class="note warn">${icon('alert')}<div><b>Salvataggio solo in questo browser.</b> L'archivio online non è disponibile in questa visualizzazione: i dati restano su questo dispositivo e si perdono se cancelli i dati del browser. Esporta regolarmente un backup da <a href="#dati">Dati e backup</a>.</div></div>`;
+  if(S.mode==='db' && S.dbError) h+=`<div class="note bad">${icon('alert')}<div><b>L'archivio non risponde.</b> Le modifiche potrebbero non essere salvate. Ricarica la pagina; se il problema continua esporta un backup.</div></div>`;
+  else if(S.mode==='db' && S.loadWarn) h+=`<div class="note warn">${icon('alert')}<div>L'archivio sta rispondendo lentamente: i dati mostrati potrebbero non essere aggiornati.</div></div>`;
+  if(S.readOnly) h+=`<div class="note bad">${icon('alert')}<div>Questa visualizzazione è in sola lettura: le modifiche non vengono salvate.</div></div>`;
+  return h;
+}
+
+/* ---------------- Dashboard ---------------- */
+function vDashboard(){
+  const st=computeStats();
+  const empty=!S.data.contacts.size && !S.data.clients.size;
+  const greet = new Date().getHours()<13?'Buongiorno':(new Date().getHours()<18?'Buon pomeriggio':'Buonasera');
+  const due=dueItems(7);
+  const kp=(l,v,h,cls='')=>`<div class="kpi ${cls}"><div class="l">${l}</div><div class="v" title="${esc(v)}">${v}</div><div class="h">${h}</div></div>`;
+  return `${storageBanner()}
+  <div class="page-head"><div><h1>${greet}, Morgan</h1><p>${new Date().toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · Tutti i numeri derivano dai dati che hai inserito.</p></div>
+  <div class="row"><button class="btn" data-act="new" data-c="followups">${icon('bell')}Follow-up</button><button class="btn primary" data-act="new" data-c="contacts">${icon('plus')}Nuovo contatto</button></div></div>
+  ${empty?`<div class="welcome"><div><h2>Il tuo CRM è pronto e vuoto</h2><p>Nessun cliente o fatturato di esempio: ogni numero comparirà man mano che registri contatti, trattative e incassi reali. Scegli da dove partire.</p></div>
+  <ol><li><button class="btn primary sm" data-act="new" data-c="contacts">Aggiungi il primo contatto</button></li>
+  <li><button class="btn sm" data-act="import" data-c="contacts">Importa contatti da CSV</button></li>
+  <li><button class="btn sm" data-act="restore">Ripristina un backup JSON</button></li></ol></div>`:''}
+  <div class="kpis">
+    ${kp('Potenziali clienti',num0.format(st.total),'contatti in archivio')}
+    ${kp('Clienti contattati',num0.format(st.contacted),st.total?pct(st.contacted/st.total)+' del totale':'—')}
+    ${kp('Appuntamenti fissati',num0.format(st.appts),`${st.apptsUpcoming} in programma`)}
+    ${kp('Preventivi inviati',num0.format(st.quotesSent),money(st.quotesSentValue)+' totali')}
+    ${kp('Trattative aperte',num0.format(st.openDeals),money(st.openDealsValue)+' potenziali')}
+    ${kp('Contratti acquisiti',num0.format(st.contracts),`${st.won} lead in fase Vinto`)}
+    ${kp('Valore opportunità',money(st.pipelineValue),'lead non ancora chiusi')}
+    ${kp('Fatturato acquisito',money(st.agreed),`incassato ${money(st.collected)}`)}
+    ${kp('Conversion rate',pct(st.conv),(st.won+st.lost)?`win rate ${pct(st.winRate)} sulle chiuse`:'nessuna trattativa chiusa')}
+    ${kp('Attività in scadenza',num0.format(st.due),st.overdue?`${st.overdue} scadute`:'prossimi 7 giorni',st.overdue?'hl':'')}
+  </div>
+  <div class="grid-3" style="margin-bottom:16px">
+    <div class="card"><div class="card-h"><h2>Attività in scadenza</h2><span class="sub">scadute e prossimi 7 giorni</span></div>
+      <div class="list" style="margin-top:10px">${due.length?due.slice(0,10).map(dueRow).join(''):`<div class="empty" style="padding:28px"><b>Nessuna attività in scadenza</b>Programma un follow-up o un appuntamento per vederli qui.</div>`}
+      ${due.length>10?`<div class="li"><span></span><a href="#followup" class="s">+${due.length-10} altre attività</a><span></span></div>`:''}</div></div>
+    <div class="card"><div class="card-h"><h2>Incassi</h2><span class="sub">da clienti acquisiti</span></div><div class="card-b">${cashBlock(st)}</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h2>Nuovi contatti</h2><span class="sub">per data di acquisizione · 12 mesi</span></div><div class="card-b"><div class="chart" data-chart="leads"></div></div></div>
+    <div class="card"><div class="card-h"><h2>Evoluzione delle trattative</h2><span class="sub">ingressi in fase · 12 mesi</span></div><div class="card-b"><div class="legend" style="margin-bottom:8px"><span><i style="background:var(--s1)"></i>Nuove trattative</span><span><i style="background:var(--s3)"></i>Vinte</span><span><i style="background:var(--s2)"></i>Perse</span></div><div class="chart" data-chart="deals"></div></div></div>
+    <div class="card"><div class="card-h"><h2>Conversioni commerciali</h2><span class="sub">contatti che hanno raggiunto ogni fase</span></div><div class="card-b">${funnel()}</div></div>
+    <div class="card"><div class="card-h"><h2>Valore delle opportunità per mese</h2><span class="sub">12 mesi</span></div><div class="card-b"><div class="legend" style="margin-bottom:8px"><span><i style="background:var(--bar-2)"></i>Valore potenziale nuovi lead</span><span><i style="background:var(--bar)"></i>Contratti acquisiti</span></div><div class="chart" data-chart="value"></div></div></div>
+  </div>`;
+}
+function dueRow(d){
+  const cls=d.over?'over':'';
+  const pc=d.over?'bad':(d.days===0?'warn':'');
+  return `<div class="li li-click ${cls}" data-act="openDue" data-kind="${d.kind}" data-id="${d.id}"><div class="ico">${icon(d.ico)}</div>
+  <div style="min-width:0"><div class="t">${esc(d.title)}</div><div class="s">${fmtDate(d.date)}${d.time?' · '+esc(d.time):''}${d.sub?' · '+esc(d.sub):''}</div></div>
+  <span class="pill ${pc}">${d.over&&d.days===0?'Scaduto':relDay(d.days)}</span></div>`;
+}
+function cashBlock(st){
+  const tot=st.agreed||0; const a=tot?st.collected/tot*100:0;
+  return `<div style="display:flex;flex-direction:column;gap:14px">
+  <div><div class="cell-sub">Importo concordato</div><div class="num" style="font-size:22px;font-weight:600">${money(st.agreed)}</div></div>
+  <div class="progress" title="Incassato ${money(st.collected)} su ${money(st.agreed)}"><span style="width:${Math.min(100,a)}%"></span></div>
+  <div class="kv"><div><dt>Incassato</dt><dd class="num">${money(st.collected)}</dd></div><div><dt>Da incassare</dt><dd class="num">${money(st.outstanding)}</dd></div></div>
+  <div class="cell-sub">Contano solo acconti e saldi registrati come ricevuti nei clienti acquisiti. Un preventivo accettato non è un incasso.</div>
+  <a class="btn sm" href="#clienti" style="align-self:flex-start">Apri clienti acquisiti</a></div>`;
+}
+function funnel(){
+  const cs=all('contacts'); const tot=cs.length;
+  if(!tot) return `<div class="empty" style="padding:30px 10px">Il funnel compare dopo il primo contatto.</div>`;
+  const rows=STAGES.slice(0,8).map((s,i)=>{ const n=cs.filter(c=>maxReach(c)>=i).length; return {l:s.l,n}; });
+  const lost=cs.filter(c=>c.stage==='perso').length;
+  const row=(l,n,cls='')=>`<div class="f-row ${cls}" data-tip="<b>${esc(l)}</b><br>${n} contatti · ${pct(n/tot)} del totale"><span>${esc(l)}</span><div class="f-bar"><span style="width:${(n/tot*100).toFixed(2)}%"></span></div><span class="n">${n} · ${pct(n/tot)}</span></div>`;
+  return `<div class="funnel">${rows.map(r=>row(r.l,r.n)).join('')}${row('Perso',lost,'lost')}</div>`;
+}
+
+/* ---------------- Charts (SVG) ---------------- */
+function niceStep(v){ if(v<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))); const n=v/p; const m=n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10; return m*p; }
+function niceMax(v,isInt){ if(isInt) return Math.max(1,Math.ceil(v/4))*4; return v<=0?4:niceStep(v/4)*4; }
+function chartFrame(w,h,max,fmt){
+  const L=fmt===moneyShort?52:30, R=8, T=10, B=24; const iw=w-L-R, ih=h-T-B;
+  let g=''; for(let i=0;i<=4;i++){ const v=max*i/4, y=T+ih-ih*i/4; g+=`<line x1="${L}" x2="${w-R}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y+3.5}" text-anchor="end" font-size="10.5" fill="var(--ink-3)" font-family="var(--f-mono)">${esc(fmt(v))}</text>`; }
+  return {L,R,T,B,iw,ih,g};
+}
+function monthLabels(months,L,iw,h){ const step=iw/months.length; const every=iw<420?2:1; return months.map((m,i)=> (i%every && i!==months.length-1)?'':`<text x="${L+step*i+step/2}" y="${h-6}" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">${m.label}${m.m===0||i===0?" '"+String(m.year).slice(2):''}</text>`).join(''); }
+function barChart(el, months, series, fmt){
+  const w=Math.max(260,el.clientWidth), h=220;
+  const max=niceMax(Math.max(0,...series.flatMap(s=>s.values)),fmt!==moneyShort);
+  const f=chartFrame(w,h,max,fmt);
+  const step=f.iw/months.length; const groupW=Math.min(step*0.7, series.length*22); const bw=(groupW-(series.length-1)*2)/series.length;
+  let bars='', hits='';
+  months.forEach((m,i)=>{
+    const x0=f.L+step*i+(step-groupW)/2;
+    series.forEach((s,j)=>{ const v=s.values[i]; if(!v) return; const bh=Math.max(1,f.ih*v/max); const x=x0+j*(bw+2), y=f.T+f.ih-bh; const r=Math.min(4,bw/2,bh);
+      bars+=`<path d="M${x},${y+bh} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${y+bh} Z" fill="${s.color}"/>`; });
+    const tip=`<b>${m.label} ${m.year}</b>`+series.map(s=>`<br><span class=&quot;sw&quot; style=&quot;background:${s.color}&quot;></span>${esc(s.name)}: ${esc(s.fmt?s.fmt(s.values[i]):fmt(s.values[i]))}`).join('');
+    hits+=`<rect x="${f.L+step*i}" y="${f.T}" width="${step}" height="${f.ih}" fill="transparent" data-tip="${tip}"/>`;
+  });
+  const empty=series.every(s=>s.values.every(v=>!v));
+  el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${esc(series.map(s=>s.name).join(', '))}">${f.g}<line x1="${f.L}" x2="${w-f.R}" y1="${f.T+f.ih}" y2="${f.T+f.ih}" stroke="var(--line-strong)"/>${bars}${monthLabels(months,f.L,f.iw,h)}${hits}</svg>${empty?'<div class="chart-empty">Nessun dato nel periodo</div>':''}`;
+}
+function lineChart(el, months, series, fmt){
+  const w=Math.max(260,el.clientWidth), h=220;
+  const max=niceMax(Math.max(0,...series.flatMap(s=>s.values)),fmt!==moneyShort);
+  const f=chartFrame(w,h,max,fmt);
+  const step=f.iw/months.length; const X=i=>f.L+step*i+step/2; const Y=v=>f.T+f.ih-f.ih*v/max;
+  let lines='', hits='';
+  series.forEach(s=>{ const d=s.values.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+    lines+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const li=s.values.length-1; lines+=`<circle cx="${X(li)}" cy="${Y(s.values[li])}" r="4" fill="${s.color}" stroke="var(--surface)" stroke-width="2"/>`; });
+  months.forEach((m,i)=>{
+    const tip=`<b>${m.label} ${m.year}</b>`+series.map(s=>`<br><span class=&quot;sw&quot; style=&quot;background:${s.color}&quot;></span>${esc(s.name)}: ${s.values[i]}`).join('');
+    hits+=`<g class="hit"><line x1="${X(i)}" x2="${X(i)}" y1="${f.T}" y2="${f.T+f.ih}" stroke="var(--ink-3)" stroke-dasharray="3 3" opacity="0"/><rect x="${f.L+step*i}" y="${f.T}" width="${step}" height="${f.ih}" fill="transparent" data-tip="${tip}"/></g>`;
+  });
+  const empty=series.every(s=>s.values.every(v=>!v));
+  el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Evoluzione trattative">${f.g}${lines}${monthLabels(months,f.L,f.iw,h)}${hits}</svg>${empty?'<div class="chart-empty">Nessun cambio di fase registrato nel periodo</div>':''}`;
+  $$('.hit',el).forEach(g=>{ g.addEventListener('mouseenter',()=>g.firstChild.setAttribute('opacity','1')); g.addEventListener('mouseleave',()=>g.firstChild.setAttribute('opacity','0')); });
+}
+function drawCharts(){
+  const months=lastMonths(12); const idx=Object.fromEntries(months.map((m,i)=>[m.key,i]));
+  const z=()=>months.map(()=>0);
+  const leads=z(), potential=z(), wonVal=z(), opened=z(), won=z(), lost=z();
+  all('contacts').forEach(c=>{
+    const i=idx[mk(c.acquisitionDate)]; if(i!=null){ leads[i]++; potential[i]+=(+c.potentialValue||0); }
+    const hist=(c.stageHistory||[]).slice().sort((a,b)=>String(a.at).localeCompare(String(b.at)));
+    const fo=hist.find(hh=>SIDX[hh.stage]>=3 && hh.stage!=='perso'); if(fo){ const k=idx[mk(isoOf(new Date(fo.at)))]; if(k!=null) opened[k]++; }
+    const fw=hist.filter(hh=>hh.stage==='vinto').pop(); if(fw&&c.stage==='vinto'){ const k=idx[mk(isoOf(new Date(fw.at)))]; if(k!=null) won[k]++; }
+    const fl=hist.filter(hh=>hh.stage==='perso').pop(); if(fl&&c.stage==='perso'){ const k=idx[mk(isoOf(new Date(fl.at)))]; if(k!=null) lost[k]++; }
+  });
+  all('clients').forEach(cl=>{ const i=idx[mk(cl.acquisitionDate)]; if(i!=null) wonVal[i]+=(+cl.agreedAmount||0); });
+  const intFmt=v=>String(Math.round(v*10)/10).replace('.',',');
+  const el1=$('[data-chart="leads"]'); if(el1) barChart(el1,months,[{name:'Nuovi contatti',color:'var(--bar)',values:leads}],intFmt);
+  const el2=$('[data-chart="deals"]'); if(el2) lineChart(el2,months,[{name:'Nuove trattative',color:'var(--s1)',values:opened},{name:'Vinte',color:'var(--s3)',values:won},{name:'Perse',color:'var(--s2)',values:lost}],intFmt);
+  const el3=$('[data-chart="value"]'); if(el3) barChart(el3,months,[{name:'Valore potenziale nuovi lead',color:'var(--bar-2)',values:potential,fmt:money},{name:'Contratti acquisiti',color:'var(--bar)',values:wonVal,fmt:money}],moneyShort);
+}
+
+/* ---------------- Contacts ---------------- */
+function uniq(arr){ return [...new Set(arr.filter(Boolean).map(s=>String(s).trim()))].sort((a,b)=>a.localeCompare(b,'it')); }
+function sortBy(list, key, dir, getter){
+  const g=getter||(r=>r[key]); const m=dir==='asc'?1:-1;
+  return list.sort((a,b)=>{ let x=g(a), y=g(b); const ex=(x==null||x===''), ey=(y==null||y===''); if(ex&&ey) return 0; if(ex) return 1; if(ey) return -1;
+    if(typeof x==='number'&&typeof y==='number') return (x-y)*m; return String(x).localeCompare(String(y),'it',{numeric:true})*m; });
+}
+function th(view,key,label,cls=''){ const st=UI[view]; const on=st.sort===key; return `<th class="sortable ${cls}" data-act="sort" data-view="${view}" data-key="${key}">${label}${on?`<span class="arr">${st.dir==='asc'?'▲':'▼'}</span>`:''}</th>`; }
+function filterContacts(){
+  const f=UI.contacts; const q=norm(f.q);
+  let list=all('contacts').filter(c=>(!f.sector||c.sector===f.sector)&&(!f.stage||c.stage===f.stage)&&(!f.source||c.source===f.source));
+  if(q) list=list.filter(c=>norm([c.company,c.contactName,c.email,c.phone,c.sector,c.location,c.service,c.notes,c.instagram,c.website].join(' ')).includes(q));
+  const numKeys={potentialValue:1,budget:1};
+  return sortBy(list,f.sort,f.dir,numKeys[f.sort]?(r=>+r[f.sort]||0):f.sort==='stage'?(r=>SIDX[r.stage]):null);
+}
+function vContacts(){
+  const f=UI.contacts; const list=filterContacts(); const tot=S.data.contacts.size;
+  const sectors=uniq(all('contacts').map(c=>c.sector)), sources=uniq(all('contacts').map(c=>c.source));
+  const val=list.reduce((s,c)=>s+(+c.potentialValue||0),0);
+  return `${storageBanner()}<div class="page-head"><div><h1>Lead e contatti</h1><p>${tot} contatti in archivio${list.length!==tot?` · ${list.length} mostrati`:''} · valore potenziale filtrato ${money(val)}</p></div>
+  <div class="row"><button class="btn" data-act="import" data-c="contacts">${icon('up')}Importa CSV</button><button class="btn" data-act="export" data-c="contacts" data-filtered="1">${icon('down')}Esporta CSV</button><button class="btn primary" data-act="new" data-c="contacts">${icon('plus')}Nuovo contatto</button></div></div>
+  <div class="toolbar">
+    <input class="input" id="cQ" placeholder="Filtra per nome, email, località…" value="${esc(f.q)}" data-bind="contacts.q">
+    <select class="select" id="cSector" data-bind="contacts.sector"><option value="">Tutti i settori</option>${sectors.map(s=>`<option ${s===f.sector?'selected':''}>${esc(s)}</option>`).join('')}</select>
+    <select class="select" id="cStage" data-bind="contacts.stage"><option value="">Tutte le fasi</option>${STAGES.map(s=>`<option value="${s.k}" ${s.k===f.stage?'selected':''}>${s.l}</option>`).join('')}</select>
+    <select class="select" id="cSource" data-bind="contacts.source"><option value="">Tutte le fonti</option>${sources.map(s=>`<option ${s===f.source?'selected':''}>${esc(s)}</option>`).join('')}</select>
+    ${(f.q||f.sector||f.stage||f.source)?`<button class="btn ghost sm" data-act="clearFilters" data-view="contacts">Azzera filtri</button>`:''}
+  </div>
+  ${!tot?emptyBox('Nessun contatto ancora','Aggiungi il primo lead oppure importa un elenco da CSV.',`<button class="btn primary" data-act="new" data-c="contacts">${icon('plus')}Nuovo contatto</button><button class="btn" data-act="import" data-c="contacts">Importa CSV</button>`):
+  !list.length?emptyBox('Nessun risultato','Nessun contatto corrisponde ai filtri.',`<button class="btn" data-act="clearFilters" data-view="contacts">Azzera filtri</button>`):
+  `<div class="tbl-wrap"><table class="tbl"><thead><tr>${th('contacts','company','Azienda')}${th('contacts','sector','Settore')}${th('contacts','location','Località')}${th('contacts','service','Servizio')}${th('contacts','stage','Fase')}${th('contacts','potentialValue','Valore','r')}${th('contacts','lastContact','Ultimo contatto')}${th('contacts','nextActionDate','Prossima azione')}<th></th></tr></thead><tbody>
+  ${list.map(c=>{ const nd=daysTo(c.nextActionDate); return `<tr data-act="openContact" data-id="${c.id}">
+    <td><div class="cell-main">${esc(c.company)}</div><div class="cell-sub">${esc(c.contactName||'')}${c.contactName&&(c.email||c.phone)?' · ':''}${esc(c.email||c.phone||'')}</div></td>
+    <td>${esc(c.sector||'—')}</td><td>${esc(c.location||'—')}</td><td>${esc(c.service||'—')}</td>
+    <td>${stagePill(c.stage)}</td><td class="r">${c.potentialValue?money(c.potentialValue):'<span class="muted">—</span>'}</td>
+    <td class="tnum">${fmtDate(c.lastContact)}</td>
+    <td>${c.nextAction||c.nextActionDate?`<div>${esc(c.nextAction||'—')}</div><div class="cell-sub ${nd!=null&&nd<0&&c.stage!=='vinto'&&c.stage!=='perso'?'':'tnum'}" ${nd!=null&&nd<0&&c.stage!=='vinto'&&c.stage!=='perso'?'style="color:var(--bad)"':''}>${c.nextActionDate?fmtDate(c.nextActionDate)+' · '+relDay(nd):''}</div>`:'<span class="muted">—</span>'}</td>
+    <td class="acts"><button class="btn icon ghost" data-act="edit" data-c="contacts" data-id="${c.id}" aria-label="Modifica">${icon('edit')}</button><button class="btn icon ghost" data-act="delContact" data-id="${c.id}" aria-label="Elimina">${icon('trash')}</button></td></tr>`; }).join('')}
+  </tbody></table></div>`}`;
+}
+function stagePill(k){ const i=SIDX[k]; const cls=k==='vinto'?'ok':k==='perso'?'bad':i>=3?'info':''; return `<span class="pill ${cls}">${esc(stageLabel(k))}</span>`; }
+function emptyBox(t,s,btns=''){ return `<div class="card empty"><b>${t}</b>${s}${btns?`<div class="row">${btns}</div>`:''}</div>`; }
+
+/* ---------------- Pipeline ---------------- */
+function vPipeline(){
+  const cs=all('contacts');
+  const cols=STAGES.map(s=>{ const items=sortBy(cs.filter(c=>c.stage===s.k),'updatedAt','desc'); const v=items.reduce((a,c)=>a+(+c.potentialValue||0),0);
+    return `<section class="col" data-stage="${s.k}" aria-label="${esc(s.l)}"><div class="col-h"><div class="t"><span class="stage-dot" style="background:${s.k==='vinto'?'var(--ok)':s.k==='perso'?'var(--bad)':SIDX[s.k]>=3?'var(--info)':'var(--ink-3)'}"></span>${s.l}<span class="n">${items.length}</span></div><div class="v">${money(v)}</div></div>
+    <div class="col-b">${items.map(kcard).join('')||'<div class="cell-sub" style="padding:8px;text-align:center">Trascina qui un contatto</div>'}</div></section>`; }).join('');
+  return `${storageBanner()}<div class="page-head"><div><h1>Pipeline commerciale</h1><p>Trascina le schede tra le fasi, oppure usa le frecce. Ogni spostamento aggiorna statistiche e storico del contatto.</p></div>
+  <div class="row"><button class="btn primary" data-act="new" data-c="contacts">${icon('plus')}Nuovo contatto</button></div></div>
+  ${!cs.length?emptyBox('La pipeline è vuota','Quando aggiungi un contatto compare nella colonna della sua fase.',`<button class="btn primary" data-act="new" data-c="contacts">${icon('plus')}Nuovo contatto</button>`):`<div class="kanban" id="kanban">${cols}</div>`}`;
+}
+function kcard(c){
+  const i=SIDX[c.stage]; const nd=daysTo(c.nextActionDate);
+  return `<article class="kc" draggable="true" data-id="${c.id}" data-act="openContact" tabindex="0">
+  <div class="t">${esc(c.company)}</div>
+  <div class="s">${esc([c.service,c.location].filter(Boolean).join(' · ')||c.contactName||'')}</div>
+  ${c.nextActionDate&&c.stage!=='vinto'&&c.stage!=='perso'?`<div class="s" style="${nd<0?'color:var(--bad)':''}">${esc(c.nextAction||'Prossima azione')} · ${relDay(nd)}</div>`:''}
+  <div class="m"><span class="val">${c.potentialValue?money(c.potentialValue):'—'}</span>
+  <span class="mv"><button data-act="stageStep" data-id="${c.id}" data-dir="-1" aria-label="Fase precedente" ${i===0?'disabled':''}>${icon('left')}</button><button data-act="stageStep" data-id="${c.id}" data-dir="1" aria-label="Fase successiva" ${i===8?'disabled':''}>${icon('right')}</button></span></div></article>`;
+}
+async function moveStage(id, stage){
+  const c=get('contacts',id); if(!c||c.stage===stage) return;
+  const from=c.stage;
+  const rec=Object.assign({},c,{stage,stageHistory:[...(c.stageHistory||[]),{stage,at:nowISO(),from}]});
+  try{ await saveRec('contacts',rec); }catch(e){ return; }
+  toast(`${c.company}: ${stageLabel(from)} → ${stageLabel(stage)}`,'',{label:'Annulla',fn:()=>{ const cur=get('contacts',id); if(cur) saveRec('contacts',Object.assign({},cur,{stage:from,stageHistory:(cur.stageHistory||[]).slice(0,-1)})); }});
+  if(stage==='vinto' && !clientForContact(id)){
+    confirmBox({title:'Contratto acquisito',text:`Vuoi creare la scheda cliente acquisito per ${c.company}? Lì registrerai importo concordato, acconti e saldi effettivamente ricevuti.`,ok:'Crea scheda cliente',cancel:'Più tardi',onOk:()=>openClientFromContact(id)});
+  }
+  if(stage==='appuntamento' && !all('appointments').some(a=>a.contactId===id && a.status==='programmato')){
+    toast('Fissa data e ora dell\'appuntamento','',{label:'Programma',fn:()=>openForm('appointments',null,{contactId:id})});
+  }
+}
+
+/* ---------------- Follow-ups ---------------- */
+function vFollowups(){
+  const t=UI.followups.tab; const q=norm(UI.followups.q); const today=todayISO();
+  const fus=all('followups');
+  const groups={
+    scaduti:fus.filter(isOverdueFU),
+    oggi:fus.filter(f=>f.status==='da_fare'&&f.date===today&&!isOverdueFU(f)),
+    programmati:fus.filter(f=>f.status==='da_fare'&&f.date>today),
+    completati:fus.filter(f=>f.status==='completato'),
+    annullati:fus.filter(f=>f.status==='annullato'),
+  };
+  groups.aperti=[...groups.scaduti,...groups.oggi,...groups.programmati];
+  groups.tutti=fus;
+  const tabs=[['aperti','Da fare'],['scaduti','Scaduti'],['oggi','Oggi'],['programmati','In programma'],['completati','Completati'],['annullati','Annullati'],['tutti','Tutti']];
+  let list=groups[t]||[];
+  if(q) list=list.filter(f=>norm([contactName(f.contactId),f.type,f.description].join(' ')).includes(q));
+  list=sortBy(list.slice(),'date',(t==='completati'||t==='annullati'||t==='tutti')?'desc':'asc',f=>(f.date||'')+(f.time||''));
+  return `${storageBanner()}<div class="page-head"><div><h1>Follow-up</h1><p>${groups.scaduti.length?`<b style="color:var(--bad)">${groups.scaduti.length} scaduti</b> · `:''}${groups.oggi.length} oggi · ${groups.programmati.length} in programma</p></div>
+  <div class="row"><button class="btn" data-act="import" data-c="followups">${icon('up')}Importa CSV</button><button class="btn" data-act="export" data-c="followups">${icon('down')}Esporta CSV</button><button class="btn primary" data-act="new" data-c="followups">${icon('plus')}Nuovo follow-up</button></div></div>
+  <div class="toolbar"><div class="seg">${tabs.map(([k,l])=>`<button class="${t===k?'on':''}" data-act="fuTab" data-tab="${k}">${l}<span class="c">${groups[k].length}</span></button>`).join('')}</div>
+  <input class="input" id="fuQ" placeholder="Cerca…" value="${esc(UI.followups.q)}" data-bind="followups.q"></div>
+  ${!fus.length?emptyBox('Nessun follow-up programmato','Programma un ricontatto per non perdere le opportunità.',S.data.contacts.size?`<button class="btn primary" data-act="new" data-c="followups">${icon('plus')}Nuovo follow-up</button>`:`<button class="btn primary" data-act="new" data-c="contacts">Aggiungi prima un contatto</button>`):
+  !list.length?emptyBox('Niente in questa vista','Nessun follow-up corrisponde.'):
+  `<div class="card list">${list.map(fuRow).join('')}</div>`}`;
+}
+function fuIcon(type){ return ({Telefonata:'phone',Email:'mail',WhatsApp:'msg','Messaggio Instagram':'cam',Videochiamata:'video',Incontro:'users'})[type]||'bell'; }
+function fuRow(f){
+  const over=isOverdueFU(f); const d=daysTo(f.date);
+  const pill=f.status==='completato'?'<span class="pill ok">Completato</span>':f.status==='annullato'?'<span class="pill">Annullato</span>':over?`<span class="pill bad">${d===0?'Scaduto oggi':relDay(d)}</span>`:`<span class="pill ${d===0?'warn':''}">${relDay(d)}</span>`;
+  return `<div class="li ${over?'over':''} ${f.status!=='da_fare'?'done':''}"><div class="ico">${icon(fuIcon(f.type))}</div>
+  <div style="min-width:0"><div class="t">${esc(f.type||'Follow-up')} · <a href="#" data-act="openContact" data-id="${f.contactId}">${esc(contactName(f.contactId))}</a></div>
+  <div class="s">${fmtDateLong(f.date)}${f.time?' · '+esc(f.time):''}${f.description?' · '+esc(f.description):''}</div></div>
+  <div class="row" style="flex-wrap:nowrap">${pill}
+  ${f.status==='da_fare'?`<button class="btn icon ghost" data-act="fuStatus" data-id="${f.id}" data-st="completato" aria-label="Segna come completato" title="Completato">${icon('check')}</button><button class="btn icon ghost" data-act="fuStatus" data-id="${f.id}" data-st="annullato" aria-label="Annulla" title="Annulla">${icon('x')}</button>`:`<button class="btn icon ghost" data-act="fuStatus" data-id="${f.id}" data-st="da_fare" aria-label="Riapri" title="Riapri">${icon('undo')}</button>`}
+  <button class="btn icon ghost" data-act="edit" data-c="followups" data-id="${f.id}" aria-label="Modifica">${icon('edit')}</button><button class="btn icon ghost" data-act="del" data-c="followups" data-id="${f.id}" aria-label="Elimina">${icon('trash')}</button></div></div>`;
+}
+
+/* ---------------- Appointments ---------------- */
+function vAppointments(){
+  if(!UI.appointments.month) UI.appointments.month=todayISO().slice(0,7);
+  const [y,m]=UI.appointments.month.split('-').map(Number);
+  const first=new Date(y,m-1,1); const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
+  const aps=all('appointments'); const fus=all('followups').filter(f=>f.status==='da_fare');
+  const byDay={}; aps.forEach(a=>{ (byDay[a.date]=byDay[a.date]||[]).push({k:'a',r:a}); }); fus.forEach(f=>{ (byDay[f.date]=byDay[f.date]||[]).push({k:'f',r:f}); });
+  const today=todayISO();
+  let cells=['Lun','Mar','Mer','Gio','Ven','Sab','Dom'].map(d=>`<div class="dow">${d}</div>`).join('');
+  for(let i=0;i<42;i++){
+    const d=new Date(start); d.setDate(start.getDate()+i); const iso=isoOf(d);
+    if(i>=35 && d.getMonth()!==m-1) break;
+    const evs=(byDay[iso]||[]).sort((a,b)=>(a.k===b.k?0:a.k==='a'?-1:1)||String(a.r.time||'').localeCompare(String(b.r.time||'')));
+    cells+=`<div class="day ${d.getMonth()!==m-1?'out':''} ${iso===today?'today':''}" data-act="calDay" data-date="${iso}"><div class="dn"><b>${d.getDate()}</b></div>
+    ${evs.slice(0,3).map(e=>e.k==='a'?`<button class="ev ${e.r.status==='annullato'?'cancel':e.r.status==='svolto'?'donee':''}" data-act="edit" data-c="appointments" data-id="${e.r.id}" title="${esc((e.r.time||'')+' '+contactName(e.r.contactId))}">${esc(e.r.time||'')} ${esc(contactName(e.r.contactId))}</button>`:`<button class="ev fu" data-act="edit" data-c="followups" data-id="${e.r.id}" title="Follow-up: ${esc(contactName(e.r.contactId))}">↻ ${esc(contactName(e.r.contactId))}</button>`).join('')}
+    ${evs.length>3?`<span class="ev-more">+${evs.length-3}</span>`:''}</div>`;
+  }
+  const upcoming=sortBy(aps.filter(a=>a.date>=today&&a.status==='programmato'),'date','asc',a=>a.date+a.time);
+  const past=sortBy(aps.filter(a=>!(a.date>=today&&a.status==='programmato')),'date','desc',a=>a.date+(a.time||''));
+  const toRecord=aps.filter(a=>a.status==='programmato'&&a.date<today).length;
+  const monthName=first.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  return `${storageBanner()}<div class="page-head"><div><h1>Appuntamenti</h1><p>${upcoming.length} in programma${toRecord?` · <b style="color:var(--warn)">${toRecord} passati senza esito</b>`:''} · i follow-up da fare compaiono in grigio</p></div>
+  <div class="row"><button class="btn" data-act="export" data-c="appointments">${icon('down')}Esporta CSV</button><button class="btn primary" data-act="new" data-c="appointments">${icon('plus')}Nuovo appuntamento</button></div></div>
+  <div class="cal-head"><h2>${monthName}</h2><button class="btn icon" data-act="calNav" data-d="-1" aria-label="Mese precedente">${icon('left')}</button><button class="btn sm" data-act="calNav" data-d="0">Oggi</button><button class="btn icon" data-act="calNav" data-d="1" aria-label="Mese successivo">${icon('right')}</button></div>
+  <div class="cal" style="margin-bottom:20px">${cells}</div>
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h2>In programma</h2></div><div class="list" style="margin-top:10px">${upcoming.length?upcoming.map(apRow).join(''):'<div class="empty" style="padding:24px">Nessun appuntamento in programma.</div>'}</div></div>
+    <div class="card"><div class="card-h"><h2>Storico ed esiti</h2></div><div class="list" style="margin-top:10px">${past.length?past.slice(0,30).map(apRow).join(''):'<div class="empty" style="padding:24px">Ancora nessun incontro passato.</div>'}</div></div>
+  </div>`;
+}
+function apRow(a){
+  const d=daysTo(a.date); const needs=a.status==='programmato'&&d<0;
+  const st=a.status==='svolto'?`<span class="pill ok">Svolto</span>`:a.status==='annullato'?'<span class="pill">Annullato</span>':a.status==='rinviato'?'<span class="pill warn">Rinviato</span>':needs?'<span class="pill warn">Esito da registrare</span>':`<span class="pill ${d===0?'warn':''}">${relDay(d)}</span>`;
+  return `<div class="li li-click" data-act="edit" data-c="appointments" data-id="${a.id}"><div class="ico">${icon(a.meetingType==='Videochiamata'?'video':a.meetingType==='Telefonata'?'phone':'pin')}</div>
+  <div style="min-width:0"><div class="t">${esc(contactName(a.contactId))}</div><div class="s">${fmtDateLong(a.date)} · ${esc(a.time||'')} · ${esc(a.meetingType||'')}${a.outcomeTag?' · '+esc(a.outcomeTag):''}</div></div>${st}</div>`;
+}
+
+/* ---------------- Quotes ---------------- */
+function vQuotes(){
+  const f=UI.quotes; const q=norm(f.q); const qs=all('quotes');
+  const sum=st=>qs.filter(x=>x.status===st).reduce((s,x)=>s+(+x.amount||0),0);
+  const cnt=st=>qs.filter(x=>x.status===st).length;
+  const decided=cnt('accettato')+cnt('rifiutato');
+  let list=qs.filter(x=>!f.status||x.status===f.status);
+  if(q) list=list.filter(x=>norm([contactName(x.contactId),x.service,x.number,x.notes].join(' ')).includes(q));
+  list=sortBy(list,f.sort,f.dir,f.sort==='amount'?(r=>+r.amount||0):f.sort==='client'?(r=>contactName(r.contactId)):null);
+  return `${storageBanner()}<div class="page-head"><div><h1>Preventivi</h1><p>${qs.length} preventivi registrati${decided?` · tasso di accettazione ${pct(cnt('accettato')/decided)}`:''}</p></div>
+  <div class="row"><button class="btn" data-act="import" data-c="quotes">${icon('up')}Importa CSV</button><button class="btn" data-act="export" data-c="quotes">${icon('down')}Esporta CSV</button><button class="btn primary" data-act="new" data-c="quotes">${icon('plus')}Nuovo preventivo</button></div></div>
+  <div class="sumbar">
+    <div><div class="l">Preventivi aperti</div><div class="v">${money(sum('preparazione')+sum('inviato'))}</div><div class="h">${cnt('preparazione')} in preparazione · ${cnt('inviato')} inviati</div></div>
+    <div><div class="l">Inviati in attesa</div><div class="v">${money(sum('inviato'))}</div><div class="h">${cnt('inviato')} preventivi</div></div>
+    <div><div class="l">Accettati</div><div class="v">${money(sum('accettato'))}</div><div class="h">${cnt('accettato')} preventivi · non ancora incassati</div></div>
+    <div><div class="l">Rifiutati</div><div class="v">${money(sum('rifiutato'))}</div><div class="h">${cnt('rifiutato')} preventivi</div></div>
+  </div>
+  <div class="note">${icon('info')}<div>Un preventivo accettato indica un accordo, non denaro ricevuto. Gli incassi si registrano come acconto e saldo nella scheda del <a href="#clienti">cliente acquisito</a>.</div></div>
+  <div class="toolbar"><div class="seg"><button class="${!f.status?'on':''}" data-act="qTab" data-st="">Tutti<span class="c">${qs.length}</span></button>${Q_STATUS.map(s=>`<button class="${f.status===s.k?'on':''}" data-act="qTab" data-st="${s.k}">${s.l}<span class="c">${cnt(s.k)}</span></button>`).join('')}</div>
+  <input class="input" id="qQ" placeholder="Cerca cliente o servizio…" value="${esc(f.q)}" data-bind="quotes.q"></div>
+  ${!qs.length?emptyBox('Nessun preventivo','Registra le proposte che prepari e invii.',S.data.contacts.size?`<button class="btn primary" data-act="new" data-c="quotes">${icon('plus')}Nuovo preventivo</button>`:`<button class="btn primary" data-act="new" data-c="contacts">Aggiungi prima un contatto</button>`):
+  !list.length?emptyBox('Nessun risultato','Nessun preventivo in questa vista.'):
+  `<div class="tbl-wrap"><table class="tbl"><thead><tr>${th('quotes','client','Cliente')}${th('quotes','service','Servizio')}${th('quotes','amount','Importo','r')}${th('quotes','sentDate','Invio')}${th('quotes','expiryDate','Scadenza')}${th('quotes','status','Stato')}<th></th></tr></thead><tbody>
+  ${list.map(x=>{ const d=daysTo(x.expiryDate); const exp=x.status==='inviato'&&d!=null&&d<0; return `<tr data-act="edit" data-c="quotes" data-id="${x.id}">
+  <td><div class="cell-main">${esc(contactName(x.contactId))}</div>${x.number?`<div class="cell-sub">N. ${esc(x.number)}</div>`:''}</td>
+  <td>${esc(x.service||'—')}</td><td class="r">${money(x.amount)}</td><td class="tnum">${fmtDate(x.sentDate)}</td>
+  <td class="tnum" ${exp?'style="color:var(--bad)"':''}>${fmtDate(x.expiryDate)}${x.status==='inviato'&&d!=null?`<div class="cell-sub" ${exp?'style="color:var(--bad)"':''}>${exp?'Scaduto':relDay(d)}</div>`:''}</td>
+  <td>${qPill(x.status)}</td>
+  <td class="acts">${x.status==='accettato'&&!all('clients').some(c=>c.quoteId===x.id)?`<button class="btn sm" data-act="quoteToClient" data-id="${x.id}">${icon('brief')}Crea cliente</button>`:''}<button class="btn icon ghost" data-act="del" data-c="quotes" data-id="${x.id}" aria-label="Elimina">${icon('trash')}</button></td></tr>`; }).join('')}
+  </tbody></table></div>`}`;
+}
+function qPill(s){ return `<span class="pill ${s==='accettato'?'ok':s==='rifiutato'?'bad':s==='inviato'?'info':''}">${lbl(Q_STATUS,s)}</span>`; }
+
+/* ---------------- Clients ---------------- */
+function vClients(){
+  const f=UI.clients; const q=norm(f.q); const cls=all('clients');
+  const agreed=cls.reduce((s,c)=>s+(+c.agreedAmount||0),0), coll=cls.reduce((s,c)=>s+collected(c),0), out=cls.reduce((s,c)=>s+outstanding(c),0);
+  let list=cls.filter(c=>!f.status||c.projectStatus===f.status);
+  if(q) list=list.filter(c=>norm([c.company,c.contactName,c.services,c.email,c.vat,c.notes].join(' ')).includes(q));
+  const nk={agreedAmount:1,deposit:1,balance:1}; list=sortBy(list,f.sort,f.dir,nk[f.sort]?(r=>+r[f.sort]||0):f.sort==='out'?outstanding:null);
+  return `${storageBanner()}<div class="page-head"><div><h1>Clienti acquisiti</h1><p>${cls.length} contratti · importi concordati e incassi effettivi tenuti separati</p></div>
+  <div class="row"><button class="btn" data-act="import" data-c="clients">${icon('up')}Importa CSV</button><button class="btn" data-act="export" data-c="clients">${icon('down')}Esporta CSV</button><button class="btn primary" data-act="new" data-c="clients">${icon('plus')}Nuovo cliente</button></div></div>
+  <div class="sumbar">
+    <div><div class="l">Importo concordato</div><div class="v">${money(agreed)}</div><div class="h">fatturato acquisito</div></div>
+    <div><div class="l">Incassato</div><div class="v" style="color:var(--ok)">${money(coll)}</div><div class="h">acconti + saldi ricevuti</div></div>
+    <div><div class="l">Da incassare</div><div class="v">${money(out)}</div><div class="h">${cls.filter(c=>outstanding(c)>0).length} clienti con importi aperti</div></div>
+    <div><div class="l">Progetti in corso</div><div class="v">${cls.filter(c=>c.projectStatus==='In corso'||c.projectStatus==='In revisione').length}</div><div class="h">${cls.filter(c=>c.projectStatus==='Completato').length} completati</div></div>
+  </div>
+  <div class="toolbar"><input class="input" id="clQ" placeholder="Cerca cliente o servizio…" value="${esc(f.q)}" data-bind="clients.q">
+  <select class="select" id="clSt" data-bind="clients.status"><option value="">Tutti gli stati progetto</option>${P_STATUS.map(s=>`<option ${s===f.status?'selected':''}>${s}</option>`).join('')}</select></div>
+  ${!cls.length?emptyBox('Nessun cliente acquisito','Quando chiudi un contratto, registralo qui con importo concordato e incassi ricevuti. Puoi farlo anche spostando un lead in "Vinto".',`<button class="btn primary" data-act="new" data-c="clients">${icon('plus')}Nuovo cliente</button>`):
+  !list.length?emptyBox('Nessun risultato','Nessun cliente corrisponde ai filtri.'):
+  `<div class="tbl-wrap"><table class="tbl"><thead><tr>${th('clients','company','Cliente')}${th('clients','services','Servizi')}${th('clients','agreedAmount','Concordato','r')}${th('clients','deposit','Acconto','r')}${th('clients','balance','Saldo','r')}${th('clients','out','Da incassare','r')}${th('clients','projectStatus','Progetto')}${th('clients','acquisitionDate','Acquisito il')}<th></th></tr></thead><tbody>
+  ${list.map(c=>{ const o=outstanding(c); return `<tr data-act="openClient" data-id="${c.id}"><td><div class="cell-main">${esc(c.company)}</div><div class="cell-sub">${esc(c.contactName||'')}</div></td>
+  <td style="max-width:260px">${esc(c.services||'—')}</td><td class="r">${money(c.agreedAmount)}</td><td class="r">${c.deposit?money(c.deposit):'<span class="muted">—</span>'}</td><td class="r">${c.balance?money(c.balance):'<span class="muted">—</span>'}</td>
+  <td class="r" style="${o>0?'font-weight:600':''}">${o>0?money(o):'<span class="pill ok">Saldato</span>'}</td><td>${projPill(c.projectStatus)}</td><td class="tnum">${fmtDate(c.acquisitionDate)}</td>
+  <td class="acts"><button class="btn icon ghost" data-act="edit" data-c="clients" data-id="${c.id}" aria-label="Modifica">${icon('edit')}</button><button class="btn icon ghost" data-act="del" data-c="clients" data-id="${c.id}" aria-label="Elimina">${icon('trash')}</button></td></tr>`; }).join('')}
+  </tbody></table></div>`}`;
+}
+function projPill(s){ return `<span class="pill ${s==='Completato'?'ok':s==='In corso'||s==='In revisione'?'info':s==='In pausa'?'warn':''}">${esc(s||'—')}</span>`; }
+
+/* ---------------- Data & backup ---------------- */
+function vData(){
+  const counts=COLLS.map(c=>`<li>${SCHEMA[c].name}: <b class="num">${S.data[c].size}</b></li>`).join('');
+  const nLocal=S.mode==='db'?countLocal():0;
+  const mode = S.mode==='db'
+    ? `<div class="note">${icon('db')}<div><b>Archivio online dell'artifact su claude.ai.</b> I dati sono salvati sul server di questo CRM e restano disponibili tra le sessioni quando lo apri con il tuo account Claude, anche da un altro dispositivo. Le regole di accesso permettono la lettura e la modifica solo a te come proprietario: se condividi il link, gli altri non vedono i tuoi clienti.</div></div>`
+    : `<div class="note warn">${icon('alert')}<div><b>Salvataggio locale nel browser.</b> In questa visualizzazione l'archivio online non è disponibile, quindi i dati sono salvati solo in questo browser su questo dispositivo. <b>Non sono sincronizzati</b> con altri dispositivi o browser e si perdono se cancelli i dati di navigazione o usi una finestra anonima. Esporta un backup JSON con regolarità.</div></div>`;
+  return `${storageBanner().replace(/<div class="note warn">[\s\S]*?Salvataggio solo in questo browser[\s\S]*?<\/div><\/div>/,'')}<div class="page-head"><div><h1>Dati e backup</h1><p>Dove sono salvati i tuoi dati, come esportarli e come ripristinarli.</p></div></div>
+  ${mode}
+  ${nLocal?`<div class="note warn">${icon('info')}<div style="flex:1">In questo browser ci sono <b>${nLocal} record</b> salvati localmente in passato. Puoi copiarli nell'archivio online. <div class="row" style="margin-top:8px"><button class="btn sm" data-act="migrateLocal">Importa nell'archivio online</button><button class="btn sm ghost" data-act="clearLocal">Elimina la copia locale</button></div></div></div>`:''}
+  <div class="data-grid">
+    <div class="card"><div class="card-h"><h2>Backup completo (JSON)</h2></div><div class="card-b">
+      <p style="margin:0 0 12px;color:var(--ink-2)">Un file unico con contatti, follow-up, appuntamenti, preventivi e clienti. È la copia di sicurezza consigliata: conservala sul tuo computer o in cloud.</p>
+      <ul>${counts}</ul>
+      <div class="row" style="margin-top:14px"><button class="btn primary" data-act="backup">${icon('down')}Esporta backup</button><button class="btn" data-act="restore">${icon('up')}Ripristina backup</button></div>
+    </div></div>
+    <div class="card"><div class="card-h"><h2>CSV per Excel e Google Sheets</h2></div><div class="card-b">
+      <p style="margin:0 0 12px;color:var(--ink-2)">Separatore punto e virgola, date gg/mm/aaaa, importi con la virgola decimale. Per importare usa le stesse intestazioni dell'esportazione: le colonne non riconosciute vengono ignorate.</p>
+      <div class="tbl-wrap"><table class="tbl csv-tbl"><tbody>${COLLS.map(c=>`<tr style="cursor:default"><td>${SCHEMA[c].name}</td><td class="acts"><button class="btn sm" data-act="export" data-c="${c}">${icon('down')}Esporta</button> <button class="btn sm" data-act="import" data-c="${c}">${icon('up')}Importa</button> <button class="btn sm ghost" data-act="template" data-c="${c}">Modello vuoto</button></td></tr>`).join('')}</tbody></table></div>
+    </div></div>
+    <div class="card"><div class="card-h"><h2>Limiti da conoscere</h2></div><div class="card-b"><ul style="margin:0">
+      ${S.mode==='db'?`<li>L'archivio online contiene fino a 25.000 record in totale: ampiamente sufficiente per un'attività freelance.</li><li>Serve una connessione internet: offline le modifiche potrebbero non essere salvate.</li><li>Se elimini questo artifact da claude.ai, l'archivio viene cancellato con esso. Tieni sempre un backup recente.</li>`
+      :`<li>I dati non lasciano questo browser e non sono visibili da altri dispositivi.</li><li>Lo spazio del browser è limitato (alcuni MB): sufficiente per migliaia di contatti senza allegati.</li><li>Pulizia dei dati di navigazione, modalità anonima o un altro browser = dati non disponibili.</li>`}
+      <li>Il CRM non invia email né effettua chiamate: telefoni ed email sono copiabili con un clic.</li></ul></div></div>
+    <div class="card"><div class="card-h"><h2>Zona pericolosa</h2></div><div class="card-b">
+      <p style="margin:0 0 12px;color:var(--ink-2)">Cancella definitivamente tutti i record di questo CRM. Esporta prima un backup.</p>
+      <button class="btn danger" data-act="wipe">${icon('trash')}Elimina tutti i dati</button></div></div>
+  </div>`;
+}
+
+/* ---------------- Drawer: contact & client detail ---------------- */
+function renderDrawer(){
+  const root=$('#drawerRoot');
+  if(!UI.drawer){ root.innerHTML=''; return; }
+  const {type,id}=UI.drawer;
+  const r=get(type==='contact'?'contacts':'clients',id);
+  if(!r){ UI.drawer=null; root.innerHTML=''; return; }
+  const scroll=$('.drawer-b',root)?$('.drawer-b',root).scrollTop:0;
+  root.innerHTML=`<div class="drawer-wrap" data-act="closeDrawerBg"><aside class="drawer" role="dialog" aria-modal="true" aria-label="Scheda ${esc(r.company)}">${type==='contact'?contactDetail(r):clientDetail(r)}</aside></div>`;
+  const b=$('.drawer-b',root); if(b) b.scrollTop=scroll;
+}
+function copyBtn(v){ return v?`<button class="copy" data-act="copy" data-v="${esc(v)}" aria-label="Copia" title="Copia">${icon('copy')}</button>`:''; }
+function kvItem(l,v,raw){ return `<div><dt>${l}</dt><dd>${v||'<span style="color:var(--ink-3)">—</span>'}${raw?copyBtn(raw):''}</dd></div>`; }
+function contactDetail(c){
+  const fus=sortBy(all('followups').filter(f=>f.contactId===c.id),'date','desc',f=>f.date+(f.time||''));
+  const aps=sortBy(all('appointments').filter(a=>a.contactId===c.id),'date','desc',a=>a.date+(a.time||''));
+  const qs=sortBy(all('quotes').filter(q=>q.contactId===c.id),'sentDate','desc');
+  const cl=clientForContact(c.id);
+  const nd=daysTo(c.nextActionDate);
+  const hist=(c.stageHistory||[]).slice().reverse();
+  return `<div class="drawer-h"><div class="top"><div style="min-width:0"><h2>${esc(c.company)}</h2><div class="meta">${esc([c.contactName,c.sector,c.location].filter(Boolean).join(' · ')||'Nessun dettaglio')}</div></div>
+  <button class="btn icon ghost" data-act="closeDrawer" aria-label="Chiudi">${icon('x')}</button></div>
+  <div class="row"><select class="select" id="dStage" data-act-change="setStage" data-id="${c.id}" aria-label="Fase pipeline">${STAGES.map(s=>`<option value="${s.k}" ${s.k===c.stage?'selected':''}>${s.l}</option>`).join('')}</select>
+  <button class="btn sm" data-act="edit" data-c="contacts" data-id="${c.id}">${icon('edit')}Modifica</button>
+  <button class="btn sm danger" data-act="delContact" data-id="${c.id}">${icon('trash')}Elimina</button></div>
+  <div class="row"><button class="btn sm" data-act="new" data-c="followups" data-contact="${c.id}">${icon('plus')}Follow-up</button><button class="btn sm" data-act="new" data-c="appointments" data-contact="${c.id}">${icon('plus')}Appuntamento</button><button class="btn sm" data-act="new" data-c="quotes" data-contact="${c.id}">${icon('plus')}Preventivo</button>${cl?`<button class="btn sm" data-act="openClient" data-id="${cl.id}">${icon('brief')}Scheda cliente</button>`:`<button class="btn sm" data-act="clientFromContact" data-id="${c.id}">${icon('trophy')}Segna come acquisito</button>`}
+  <button class="btn sm ghost" data-act="touch" data-id="${c.id}" title="Imposta ultimo contatto a oggi">${icon('check')}Contattato oggi</button></div></div>
+  <div class="drawer-b">
+    ${(c.nextAction||c.nextActionDate)?`<div class="next-box" style="${nd!=null&&nd<0&&c.stage!=='vinto'&&c.stage!=='perso'?'border-color:var(--bad)':''}">${icon('flag')}<div style="flex:1;min-width:0"><div style="font-weight:500">${esc(c.nextAction||'Prossima azione')}</div><div class="cell-sub">${c.nextActionDate?fmtDateLong(c.nextActionDate)+' · '+relDay(nd):'Senza data'}</div></div></div>`:''}
+    <div class="sec"><h4>Contatti</h4><dl class="kv" style="margin:0">
+      ${kvItem('Referente',esc(c.contactName))}
+      ${kvItem('Telefono',c.phone?`<span class="mono">${esc(c.phone)}</span>`:'',c.phone)}
+      ${kvItem('Email',c.email?esc(c.email):'',c.email)}
+      ${kvItem('Sito web',c.website?`<a href="${esc(urlOf(c.website))}" target="_blank" rel="noopener">${esc(c.website.replace(/^https?:\/\//,''))}</a>`:'')}
+      ${kvItem('Instagram',c.instagram?`<a href="${esc(igUrl(c.instagram))}" target="_blank" rel="noopener">${esc(igHandle(c.instagram))}</a>`:'')}
+      ${kvItem('Località',esc(c.location))}
+    </dl></div>
+    <div class="sec"><h4>Opportunità</h4><dl class="kv" style="margin:0">
+      ${kvItem('Fase',stagePill(c.stage))}${kvItem('Settore',esc(c.sector))}
+      ${kvItem('Servizio di interesse',esc(c.service))}${kvItem('Fonte',esc(c.source))}
+      ${kvItem('Budget indicativo',c.budget?`<span class="num">${money(c.budget)}</span>`:'')}${kvItem('Valore potenziale',c.potentialValue?`<span class="num">${money(c.potentialValue)}</span>`:'')}
+      ${kvItem('Data di acquisizione',fmtDate(c.acquisitionDate))}${kvItem('Ultimo contatto',c.lastContact?fmtDate(c.lastContact)+` <span class="cell-sub">(${relDay(daysTo(c.lastContact))})</span>`:'')}
+    </dl></div>
+    ${c.notes?`<div class="sec"><h4>Note commerciali</h4><div class="notes-box">${esc(c.notes)}</div></div>`:''}
+    <div class="sec"><h4>Follow-up <span>${fus.length}</span></h4>${fus.length?`<div class="mini">${fus.map(fuRow).join('')}</div>`:'<div class="cell-sub">Nessun follow-up.</div>'}</div>
+    <div class="sec"><h4>Appuntamenti <span>${aps.length}</span></h4>${aps.length?`<div class="mini">${aps.map(apRow).join('')}</div>`:'<div class="cell-sub">Nessun appuntamento.</div>'}</div>
+    <div class="sec"><h4>Preventivi <span>${qs.length}</span></h4>${qs.length?`<div class="mini">${qs.map(q=>`<div class="li li-click" data-act="edit" data-c="quotes" data-id="${q.id}"><div class="ico">${icon('file')}</div><div style="min-width:0"><div class="t">${esc(q.service||'Preventivo')} · <span class="num">${money(q.amount)}</span></div><div class="s">Inviato ${fmtDate(q.sentDate)} · scade ${fmtDate(q.expiryDate)}</div></div>${qPill(q.status)}</div>`).join('')}</div>`:'<div class="cell-sub">Nessun preventivo.</div>'}</div>
+    <div class="sec"><h4>Storico fasi</h4>${hist.length?`<div class="timeline">${hist.map(h=>`<div><b>${esc(stageLabel(h.stage))}</b>${h.from?` <span class="cell-sub">da ${esc(stageLabel(h.from))}</span>`:''}<small>${new Date(h.at).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}</small></div>`).join('')}</div>`:'<div class="cell-sub">Nessuno spostamento registrato.</div>'}</div>
+  </div>`;
+}
+function clientDetail(c){
+  const ag=+c.agreedAmount||0, dep=+c.deposit||0, bal=+c.balance||0, o=outstanding(c);
+  const over=dep+bal>ag;
+  return `<div class="drawer-h"><div class="top"><div style="min-width:0"><h2>${esc(c.company)}</h2><div class="meta">Cliente acquisito il ${fmtDate(c.acquisitionDate)} · ${projPill(c.projectStatus)}</div></div>
+  <button class="btn icon ghost" data-act="closeDrawer" aria-label="Chiudi">${icon('x')}</button></div>
+  <div class="row"><button class="btn sm" data-act="edit" data-c="clients" data-id="${c.id}">${icon('edit')}Modifica</button>${c.contactId&&get('contacts',c.contactId)?`<button class="btn sm" data-act="openContact" data-id="${c.contactId}">${icon('users')}Scheda lead</button>`:''}<button class="btn sm danger" data-act="del" data-c="clients" data-id="${c.id}">${icon('trash')}Elimina</button></div></div>
+  <div class="drawer-b">
+    <div class="sec"><h4>Pagamenti</h4>
+      <div class="progress" style="margin-bottom:12px" title="Acconto + saldo su importo concordato">${ag?`<span style="width:${Math.min(100,dep/ag*100)}%"></span><span style="width:${Math.min(100,bal/ag*100)}%"></span>`:''}</div>
+      <dl class="kv" style="margin:0">${kvItem('Importo concordato',`<span class="num">${money(ag)}</span>`)}${kvItem('Da incassare',`<span class="num" style="font-weight:600">${money(o)}</span>`)}
+      ${kvItem('Acconto ricevuto',`<span class="num">${money(dep)}</span>${c.depositDate?` <span class="cell-sub">${fmtDate(c.depositDate)}</span>`:''}`)}${kvItem('Saldo ricevuto',`<span class="num">${money(bal)}</span>${c.balanceDate?` <span class="cell-sub">${fmtDate(c.balanceDate)}</span>`:''}`)}</dl>
+      ${over?`<div class="note bad" style="margin:12px 0 0">${icon('alert')}Gli incassi registrati superano l'importo concordato: verifica i dati.</div>`:''}
+    </div>
+    <div class="sec"><h4>Servizi acquistati</h4><div class="notes-box">${esc(c.services||'—')}</div></div>
+    <div class="sec"><h4>Dati aziendali</h4><dl class="kv" style="margin:0">
+      ${kvItem('Referente',esc(c.contactName))}${kvItem('Partita IVA / C.F.',c.vat?`<span class="mono">${esc(c.vat)}</span>`:'',c.vat)}
+      ${kvItem('Email',esc(c.email),c.email)}${kvItem('Telefono',c.phone?`<span class="mono">${esc(c.phone)}</span>`:'',c.phone)}
+      ${kvItem('Indirizzo',esc(c.address))}${kvItem('Stato progetto',projPill(c.projectStatus))}</dl></div>
+    ${c.notes?`<div class="sec"><h4>Note</h4><div class="notes-box">${esc(c.notes)}</div></div>`:''}
+  </div>`;
+}
+
+/* ---------------- Forms ---------------- */
+function contactOptions(sel){
+  const cs=sortBy(all('contacts'),'company','asc');
+  return `<option value="">Seleziona…</option>`+cs.map(c=>`<option value="${c.id}" ${c.id===sel?'selected':''}>${esc(c.company)}${c.contactName?' – '+esc(c.contactName):''}</option>`).join('');
+}
+function fieldHtml(fd, v){
+  if(fd.type==='section') return `<div class="form-sec">${fd.label}</div>`;
+  const id='f_'+fd.key; const req=fd.req?'<span class="req"> *</span>':'';
+  let input;
+  switch(fd.type){
+    case 'textarea': input=`<textarea class="input" id="${id}" name="${fd.key}" placeholder="${esc(fd.ph||'')}">${esc(v)}</textarea>`; break;
+    case 'select': { const opts=[...fd.options]; if(v&&!opts.includes(v)) opts.push(v); input=`<select class="select" id="${id}" name="${fd.key}">${fd.req?'':'<option value="">—</option>'}${opts.filter(o=>o!=='').map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('')}</select>`; break; }
+    case 'status': input=`<select class="select" id="${id}" name="${fd.key}">${fd.options.map(o=>`<option value="${o.k}" ${o.k===v?'selected':''}>${o.l}</option>`).join('')}</select>`; break;
+    case 'stage': input=`<select class="select" id="${id}" name="${fd.key}">${STAGES.map(o=>`<option value="${o.k}" ${o.k===v?'selected':''}>${o.l}</option>`).join('')}</select>`; break;
+    case 'contact': input=`<select class="select" id="${id}" name="${fd.key}">${contactOptions(v)}</select>`; break;
+    case 'money': input=`<input class="input num" id="${id}" name="${fd.key}" inputmode="decimal" placeholder="0" value="${v===''||v==null?'':esc(String(v).replace('.',','))}">`; break;
+    case 'date': input=`<input class="input" type="date" id="${id}" name="${fd.key}" value="${esc(v)}">`; break;
+    case 'time': input=`<input class="input" type="time" id="${id}" name="${fd.key}" value="${esc(v)}">`; break;
+    default: input=`<input class="input" type="${fd.type==='email'?'email':fd.type==='tel'?'tel':'text'}" id="${id}" name="${fd.key}" value="${esc(v)}" placeholder="${esc(fd.ph||'')}" ${fd.list?`list="dl_${fd.list}"`:''} autocomplete="off">`;
+  }
+  return `<div class="fld ${fd.wide?'wide':''}" data-f="${fd.key}"><label for="${id}">${fd.label}${req}</label>${input}${fd.hint?`<span class="hint">${fd.hint}</span>`:''}<span class="err"></span></div>`;
+}
+function openForm(c, id, preset={}){
+  const sc=SCHEMA[c]; const rec=id?clone(get(c,id)||{}):{};
+  if(id && !get(c,id)) return;
+  const needsContact=sc.fields.some(f=>f.type==='contact'&&f.req);
+  if(needsContact && !S.data.contacts.size){
+    confirmBox({title:'Serve prima un contatto',text:`Per creare un ${sc.one} devi collegarlo a un contatto. Vuoi aggiungerne uno adesso?`,ok:'Nuovo contatto',onOk:()=>openForm('contacts')}); return;
+  }
+  const vals={};
+  sc.fields.forEach(fd=>{ if(fd.type==='section') return; let v=rec[fd.key]; if(v==null&&!id){ v=preset[fd.key]!=null?preset[fd.key]:(typeof fd.def==='function'?fd.def():fd.def); } vals[fd.key]=v==null?'':v; });
+  const dls=`<datalist id="dl_sector">${uniq(all('contacts').map(x=>x.sector)).map(s=>`<option value="${esc(s)}">`).join('')}</datalist><datalist id="dl_location">${uniq(all('contacts').map(x=>x.location)).map(s=>`<option value="${esc(s)}">`).join('')}</datalist>`;
+  const body=`<form class="form" id="entityForm" novalidate>${sc.fields.map(fd=>fieldHtml(fd,vals[fd.key])).join('')}${dls}</form>`;
+  const m=openModal({title:(id?'Modifica ':'Nuovo ')+sc.one, body, wide:c==='contacts'||c==='clients',
+    footer:`${id?`<button class="btn danger" type="button" data-m="del" style="margin-right:auto">${icon('trash')}Elimina</button>`:''}<button class="btn" type="button" data-m="cancel">Annulla</button><button class="btn primary" type="submit" form="entityForm">${id?'Salva modifiche':'Salva'}</button>`});
+  const form=$('#entityForm',m);
+  if(c==='clients'){
+    const sel=$('[name="contactId"]',form);
+    sel.addEventListener('change',()=>{ const ct=get('contacts',sel.value); if(!ct) return;
+      [['company','company'],['contactName','contactName'],['email','email'],['phone','phone']].forEach(([a,b])=>{ const el=$(`[name="${a}"]`,form); if(el&&!el.value) el.value=ct[b]||''; });
+      const s=$('[name="services"]',form); if(s&&!s.value&&ct.service) s.value=ct.service;
+      const am=$('[name="agreedAmount"]',form); if(am&&!am.value&&ct.potentialValue) am.value=String(ct.potentialValue).replace('.',','); });
+  }
+  if(c==='quotes'){
+    const st=$('[name="status"]',form), sd=$('[name="sentDate"]',form), ex=$('[name="expiryDate"]',form);
+    st.addEventListener('change',()=>{ if(st.value!=='preparazione'&&!sd.value){ sd.value=todayISO(); if(!ex.value) ex.value=addDays(todayISO(),30); } });
+  }
+  $('[data-m="cancel"]',m).onclick=closeModal;
+  const del=$('[data-m="del"]',m); if(del) del.onclick=()=>{ closeModal(); if(c==='contacts') askDeleteContact(id); else askDelete(c,id); };
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const data={}; sc.fields.forEach(fd=>{ if(fd.type==='section') return; const el=form.elements[fd.key]; if(!el) return; let v=el.value.trim(); if(fd.type==='money'){ v=v===''?'':parseNum(v); } data[fd.key]=v; });
+    const errs=validate(c,data);
+    $$('.fld',form).forEach(f=>{ f.classList.remove('has-err'); $('.err',f).textContent=''; });
+    const keys=Object.keys(errs);
+    if(keys.length){ keys.forEach(k=>{ const f=$(`.fld[data-f="${k}"]`,form); if(f){ f.classList.add('has-err'); $('.err',f).textContent=errs[k]; } }); const first=$(`[name="${keys[0]}"]`,form); first&&first.focus(); return; }
+    sc.fields.forEach(fd=>{ if(fd.type==='money'&&data[fd.key]==='') data[fd.key]=null; });
+    let out=Object.assign({},rec,data);
+    if(c==='contacts'){
+      if(!id){ out.stageHistory=[{stage:out.stage,at:nowISO()}]; }
+      else if(rec.stage!==out.stage){ out.stageHistory=[...(rec.stageHistory||[]),{stage:out.stage,at:nowISO(),from:rec.stage}]; }
+    }
+    if(preset.quoteId) out.quoteId=preset.quoteId;
+    const btn=$('button[type="submit"]',m.parentElement||m); if(btn) btn.disabled=true;
+    try{ const saved=await saveRec(c,out); closeModal(); toast(id?'Modifiche salvate':`${sc.one[0].toUpperCase()+sc.one.slice(1)} salvato`);
+      if(c==='contacts'&&id&&rec.stage!==out.stage&&out.stage==='vinto'&&!clientForContact(saved.id)) confirmBox({title:'Contratto acquisito',text:`Vuoi creare la scheda cliente acquisito per ${out.company}?`,ok:'Crea scheda cliente',cancel:'Più tardi',onOk:()=>openClientFromContact(saved.id)});
+      if(c==='contacts'&&!id) { UI.drawer={type:'contact',id:saved.id}; scheduleRender(); }
+      if(c==='followups'&&data.status==='completato'){ const ct=get('contacts',data.contactId); if(ct&&(!ct.lastContact||ct.lastContact<data.date)) saveRec('contacts',Object.assign({},ct,{lastContact:data.date}),{silent:true}).catch(()=>{}); }
+    }catch(err){ if(btn) btn.disabled=false; }
+  });
+  setTimeout(()=>{ const f=$('input:not([type=hidden]),select,textarea',form); if(f&&!id) f.focus(); },30);
+}
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function validate(c,d){
+  const e={}; const sc=SCHEMA[c];
+  sc.fields.forEach(fd=>{
+    const v=d[fd.key]; if(fd.type==='section') return;
+    if(fd.req && (v===''||v==null||(typeof v==='number'&&isNaN(v)))){ e[fd.key]='Campo obbligatorio'; return; }
+    if(v===''||v==null) return;
+    if(fd.type==='email'&&!EMAIL_RE.test(v)) e[fd.key]='Email non valida';
+    if(fd.type==='money'){ if(isNaN(v)) e[fd.key]='Inserisci un importo numerico, es. 1500 o 1.500,50'; else if(v<0) e[fd.key]='L\'importo non può essere negativo'; }
+    if(fd.type==='date'&&!parseISO(v)) e[fd.key]='Data non valida';
+    if(fd.type==='contact'&&!get('contacts',v)) e[fd.key]='Contatto non trovato';
+    if(fd.type==='tel'&&!/^[+\d\s().\/-]{5,}$/.test(v)) e[fd.key]='Numero non valido';
+  });
+  if(c==='quotes'){
+    if(!e.amount&&d.amount<=0) e.amount='L\'importo deve essere maggiore di zero';
+    if(d.status!=='preparazione'&&!d.sentDate) e.sentDate='Indica la data di invio';
+    if(d.sentDate&&d.expiryDate&&d.expiryDate<d.sentDate) e.expiryDate='La scadenza è precedente alla data di invio';
+  }
+  if(c==='clients'){
+    const ag=+d.agreedAmount||0, dep=+d.deposit||0, bal=+d.balance||0;
+    if(!e.agreedAmount&&ag<=0) e.agreedAmount='Inserisci l\'importo concordato';
+    if(!e.deposit&&!e.balance&&dep+bal>ag+0.001) e.balance='Acconto + saldo superano l\'importo concordato';
+    if(dep>0&&!d.depositDate) e.depositDate='Indica quando hai ricevuto l\'acconto';
+    if(bal>0&&!d.balanceDate) e.balanceDate='Indica quando hai ricevuto il saldo';
+  }
+  if(c==='contacts'){
+    if(d.nextAction&&!d.nextActionDate) e.nextActionDate='Indica entro quando';
+    if(d.lastContact&&d.lastContact>todayISO()) e.lastContact='L\'ultimo contatto non può essere nel futuro';
+  }
+  return e;
+}
+function openClientFromContact(contactId, extra={}){
+  const ct=get('contacts',contactId); if(!ct) return;
+  openForm('clients',null,Object.assign({contactId,company:ct.company,contactName:ct.contactName||'',email:ct.email||'',phone:ct.phone||'',services:ct.service||'',agreedAmount:ct.potentialValue||''},extra));
+}
+
+/* ---------------- Modals, confirm, toast ---------------- */
+function openModal({title,body,footer,wide,small}){
+  const root=$('#modalRoot');
+  root.innerHTML=`<div class="overlay" data-close="1"><div class="modal ${wide?'wide':''} ${small?'small':''}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-h"><h3>${esc(title)}</h3><button class="btn icon ghost" data-m="x" aria-label="Chiudi">${icon('x')}</button></div><div class="modal-b">${body}</div>${footer?`<div class="modal-f">${footer}</div>`:''}</div></div>`;
+  const ov=$('.overlay',root);
+  ov.addEventListener('mousedown',e=>{ if(e.target===ov) closeModal(); });
+  $('[data-m="x"]',root).onclick=closeModal;
+  return $('.modal',root);
+}
+function closeModal(){ $('#modalRoot').innerHTML=''; }
+function confirmBox({title,text,ok='Conferma',cancel='Annulla',danger,onOk,extra=''}){
+  const root=$('#confirmRoot');
+  root.innerHTML=`<div class="overlay" style="z-index:70"><div class="modal small" role="alertdialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-h"><h3>${esc(title)}</h3></div><div class="modal-b"><p style="margin:0;color:var(--ink-2)">${esc(text)}</p>${extra}</div><div class="modal-f"><button class="btn" data-k="no">${esc(cancel)}</button><button class="btn ${danger?'danger solid':'primary'}" data-k="ok">${esc(ok)}</button></div></div></div>`;
+  const close=()=>root.innerHTML='';
+  $('[data-k="no"]',root).onclick=close;
+  $('[data-k="ok"]',root).onclick=async()=>{ const box=$('.modal',root); const vals={}; $$('input',box).forEach(i=>vals[i.name]=i.type==='checkbox'?i.checked:i.value); close(); onOk&&onOk(vals); };
+  setTimeout(()=>{ const b=$('[data-k="ok"]',root); b&&b.focus(); },20);
+}
+function toast(msg,kind='',action){
+  const el=document.createElement('div'); el.className='toast '+(kind||'');
+  el.innerHTML=`<span>${esc(msg)}</span>`;
+  if(action){ const b=document.createElement('button'); b.textContent=action.label; b.onclick=()=>{ action.fn(); el.remove(); }; el.appendChild(b); }
+  $('#toasts').appendChild(el);
+  setTimeout(()=>el.remove(), action?7000:kind==='bad'?7000:3200);
+}
+async function copyText(v){
+  try{ await navigator.clipboard.writeText(v); toast('Copiato: '+v); }
+  catch(e){ openModal({title:'Copia',body:`<input class="input" id="copyField" style="width:100%" value="${esc(v)}" readonly><p class="cell-sub">Seleziona il testo e copialo con Ctrl/Cmd + C.</p>`,small:true}); setTimeout(()=>{ const i=$('#copyField'); i&&i.select(); },30); }
+}
+
+/* ---------------- Delete helpers ---------------- */
+function askDelete(c,id){
+  const r=get(c,id); if(!r) return;
+  const name=c==='clients'?r.company:`${SCHEMA[c].one} di ${contactName(r.contactId)}`;
+  confirmBox({title:'Eliminare?',text:`Stai per eliminare ${name}. L'operazione non si può annullare.`,ok:'Elimina',danger:true,onOk:async()=>{
+    try{ await delRec(c,id); if(UI.drawer&&UI.drawer.id===id) UI.drawer=null; toast('Eliminato'); }catch(e){} }});
+}
+function askDeleteContact(id){
+  const c=get('contacts',id); if(!c) return;
+  const rel=['followups','appointments','quotes'].reduce((n,k)=>n+all(k).filter(r=>r.contactId===id).length,0);
+  const cl=clientForContact(id);
+  confirmBox({title:'Eliminare il contatto?',text:`${c.company} verrà eliminato definitivamente.${cl?' La scheda cliente acquisito resta, scollegata dal lead.':''}`,ok:'Elimina contatto',danger:true,
+    extra:rel?`<label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13px"><input type="checkbox" name="rel" checked> Elimina anche ${rel} tra follow-up, appuntamenti e preventivi collegati</label>`:'',
+    onOk:async(v)=>{
+      try{
+        await delRec('contacts',id);
+        if(v.rel){ for(const k of ['followups','appointments','quotes']){ for(const r of all(k).filter(r=>r.contactId===id)){ await delRec(k,r.id); } } }
+        if(cl){ await saveRec('clients',Object.assign({},cl,{contactId:''}),{silent:true}); }
+        if(UI.drawer&&UI.drawer.id===id) UI.drawer=null;
+        toast('Contatto eliminato');
+      }catch(e){}
+    }});
+}
+
+/* ---------------- CSV ---------------- */
+function csvCell(v){ v=v==null?'':String(v); return /[;"\n\r,]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+function toCSV(rows){ return '﻿'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n'); }
+function parseCSV(text){
+  text=text.replace(/^﻿/,'');
+  const firstLine=text.split(/\r?\n/,1)[0]||'';
+  const counts={';':0,',':0,'\t':0}; let inq=false; for(const ch of firstLine){ if(ch==='"') inq=!inq; else if(!inq&&ch in counts) counts[ch]++; }
+  const delim=Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+  const rows=[]; let row=[], cell='', q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=ch; }
+    else if(ch==='"') q=true;
+    else if(ch===delim){ row.push(cell); cell=''; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=''; }
+    else cell+=ch;
+  }
+  if(cell!==''||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(c=>String(c).trim()!==''));
+}
+function exportCols(c){
+  const cols=SCHEMA[c].fields.filter(f=>f.type!=='section').map(f=>({key:f.key,label:f.type==='contact'?(c==='clients'?'Contatto collegato':'Cliente'):f.label,fd:f}));
+  if(c==='clients') cols.push({key:'_out',label:'Da incassare (€)',calc:r=>outstanding(r)});
+  return cols;
+}
+function cellOut(fd,v){
+  if(v==null||v==='') return '';
+  switch(fd.type){
+    case 'money': return String(v).replace('.',',');
+    case 'date': return fmtDate(v);
+    case 'contact': return contactName(v);
+    case 'stage': return stageLabel(v);
+    case 'status': return lbl(fd.options,v);
+    default: return v;
+  }
+}
+function buildCSV(c,list){
+  const cols=exportCols(c);
+  const rows=[cols.map(x=>x.label)];
+  list.forEach(r=>rows.push(cols.map(x=>x.calc?String(x.calc(r)).replace('.',','):cellOut(x.fd,r[x.key]))));
+  return toCSV(rows);
+}
+async function offerFile(filename,data,mime){
+  let dl=null; try{ dl=await window.claude.use('downloads'); }catch(e){}
+  if(dl){
+    try{ await dl.save({filename,data:new Blob([data],{type:mime})}); toast('File pronto: '+filename); return; }
+    catch(e){ if(e&&(e.code==='declined'||e.code==='dismissed'||e.code==='cancelled')) return; }
+  }
+  const m=openModal({title:'Esporta '+filename,wide:true,body:`<p style="margin:0 0 10px;color:var(--ink-2)">Il download diretto non è disponibile in questa visualizzazione. Copia il contenuto e incollalo in un file chiamato <b>${esc(filename)}</b>.</p><textarea class="input mono" id="exportText" style="width:100%;min-height:280px;font-size:12px" readonly>${esc(data.replace(/^﻿/,''))}</textarea>`,
+    footer:`<button class="btn" data-m="close">Chiudi</button><button class="btn primary" data-m="copy">${icon('copy')}Copia tutto</button>`});
+  $('[data-m="close"]',m.parentElement).onclick=closeModal;
+  $('[data-m="copy"]',m.parentElement).onclick=async()=>{ const t=$('#exportText'); try{ await navigator.clipboard.writeText(t.value); toast('Contenuto copiato'); }catch(e){ t.focus(); t.select(); toast('Seleziona tutto e copia con Ctrl/Cmd + C'); } };
+}
+const stamp=()=>todayISO();
+function exportCSV(c,filtered){
+  let list=all(c);
+  if(c==='contacts'&&filtered) list=filterContacts();
+  if(!list.length){ toast('Non ci sono dati da esportare','bad'); return; }
+  offerFile(`smm-crm-${{contacts:'contatti',followups:'follow-up',appointments:'appuntamenti',quotes:'preventivi',clients:'clienti-acquisiti'}[c]}-${stamp()}.csv`,buildCSV(c,list),'text/csv;charset=utf-8');
+}
+function exportTemplate(c){ offerFile(`modello-${SCHEMA[c].name.toLowerCase().replace(/\s+/g,'-')}.csv`,toCSV([exportCols(c).filter(x=>!x.calc).map(x=>x.label)]),'text/csv;charset=utf-8'); }
+function pickFile(accept,cb){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept=accept; inp.style.display='none';
+  inp.onchange=()=>{ const f=inp.files[0]; inp.remove(); if(!f) return; if(f.size>15*1024*1024){ toast('File troppo grande (max 15 MB)','bad'); return; } const r=new FileReader(); r.onload=()=>cb(String(r.result),f.name); r.onerror=()=>toast('Impossibile leggere il file','bad'); r.readAsText(f,'utf-8'); };
+  document.body.appendChild(inp); inp.click();
+}
+function importCSV(c){
+  pickFile('.csv,text/csv,.txt',(text,name)=>{
+    let rows; try{ rows=parseCSV(text); }catch(e){ toast('CSV non leggibile','bad'); return; }
+    if(rows.length<2){ toast('Il file non contiene righe di dati','bad'); return; }
+    const head=rows[0].map(keyNorm);
+    const cols=exportCols(c).filter(x=>!x.calc);
+    const map=cols.map(col=>{ let i=head.indexOf(keyNorm(col.label)); if(i<0) i=head.indexOf(keyNorm(col.key)); if(i<0&&col.fd.type==='contact'){ i=['cliente','contatto','azienda','nomeazienda','contattocollegato','company'].map(h=>head.indexOf(h)).find(x=>x>=0); if(i==null) i=-1; } if(i<0&&col.fd.type==='stage'){ i=head.indexOf('fase'); } return {col,i}; });
+    const matched=map.filter(m=>m.i>=0);
+    const missingReq=cols.filter(x=>x.fd.req&&!(x.fd.def)&&!matched.some(m=>m.col.key===x.key));
+    const results=[]; const errors=[];
+    const existing=new Set(all('contacts').map(x=>keyNorm(x.company)+'|'+norm(x.email)));
+    let dups=0;
+    rows.slice(1).forEach((r,ri)=>{
+      const d={}; const rowErr=[];
+      matched.forEach(({col,i})=>{
+        const raw=(r[i]||'').trim(); const fd=col.fd; let v=raw;
+        if(raw==='') { v=''; }
+        else if(fd.type==='money'){ v=parseNum(raw); if(isNaN(v)) rowErr.push(`${fd.label}: "${raw}" non è un importo`); }
+        else if(fd.type==='date'){ v=parseAnyDate(raw); if(v===null){ rowErr.push(`${fd.label}: "${raw}" non è una data`); v=''; } }
+        else if(fd.type==='stage'){ const s=STAGES.find(s=>keyNorm(s.l)===keyNorm(raw)||s.k===raw); v=s?s.k:'nuovo'; if(!s) rowErr.push(`Fase "${raw}" non riconosciuta, impostata a Nuovo lead`); }
+        else if(fd.type==='status'){ const s=fd.options.find(s=>keyNorm(s.l)===keyNorm(raw)||s.k===raw); v=s?s.k:fd.def; }
+        else if(fd.type==='contact'){ const ct=all('contacts').find(x=>keyNorm(x.company)===keyNorm(raw)); v=ct?ct.id:''; if(!ct&&fd.req) rowErr.push(`Contatto "${raw}" non trovato: importa prima i contatti`); }
+        d[col.key]=v;
+      });
+      cols.forEach(col=>{ const fd=col.fd; if((d[col.key]===undefined||d[col.key]==='')&&fd.def!=null){ d[col.key]=typeof fd.def==='function'?fd.def():fd.def; } if(d[col.key]===undefined) d[col.key]=fd.type==='money'?null:''; });
+      const ve=validate(c,Object.fromEntries(Object.entries(d).map(([k,v])=>[k,v==null?'':v])));
+      // relaxed rules on import: missing payment dates or next action date are not blocking
+      delete ve.depositDate; delete ve.balanceDate; delete ve.nextActionDate;
+      Object.entries(ve).forEach(([k,msg])=>{ const fd=cols.find(x=>x.key===k); rowErr.push(`${fd?fd.fd.label:k}: ${msg}`); });
+      const blocking=rowErr.filter(x=>!/impostata a Nuovo lead/.test(x));
+      if(blocking.length){ errors.push(`Riga ${ri+2}: ${blocking.join('; ')}`); return; }
+      if(c==='contacts'){ const k=keyNorm(d.company)+'|'+norm(d.email); if(existing.has(k)){ dups++; return; } existing.add(k); }
+      const now=nowISO();
+      const rec=Object.assign({id:uid(),createdAt:now,updatedAt:now},d);
+      if(c==='contacts') rec.stageHistory=[{stage:rec.stage||'nuovo',at:now,imported:true}];
+      results.push(rec);
+    });
+    const m=openModal({title:`Importa ${SCHEMA[c].name.toLowerCase()} da ${name}`,wide:true,body:`
+      <p style="margin:0 0 8px">Righe nel file: <b>${rows.length-1}</b> · pronte all'importazione: <b>${results.length}</b>${errors.length?` · con errori: <b style="color:var(--bad)">${errors.length}</b>`:''}${dups?` · duplicati saltati (stessa azienda ed email): <b>${dups}</b>`:''}</p>
+      <p class="cell-sub" style="margin:0 0 6px">Colonne riconosciute: ${matched.map(m=>esc(m.col.label)).join(', ')||'nessuna'}</p>
+      ${missingReq.length?`<div class="note bad" style="margin:8px 0">${icon('alert')}<div>Manca la colonna obbligatoria: ${missingReq.map(x=>esc(x.label)).join(', ')}. Scarica il modello vuoto da Dati e backup per vedere le intestazioni attese.</div></div>`:''}
+      ${errors.length?`<div class="import-errs">${errors.slice(0,100).map(esc).join('<br>')}${errors.length>100?'<br>…':''}</div>`:''}
+      ${results.length?`<div class="tbl-wrap" style="margin-top:12px;max-height:240px"><table class="tbl csv-tbl"><thead><tr>${matched.slice(0,5).map(m=>`<th>${esc(m.col.label)}</th>`).join('')}</tr></thead><tbody>${results.slice(0,8).map(r=>`<tr style="cursor:default">${matched.slice(0,5).map(m=>`<td>${esc(cellOut(m.col.fd,r[m.col.key]))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}
+      <p class="cell-sub" id="impProg" style="margin:10px 0 0"></p>`,
+      footer:`<button class="btn" data-m="close">Annulla</button><button class="btn primary" data-m="go" ${results.length?'':'disabled'}>Importa ${results.length} righe</button>`});
+    const f=m.parentElement;
+    $('[data-m="close"]',f).onclick=closeModal;
+    $('[data-m="go"]',f).onclick=async(e)=>{
+      e.target.disabled=true; S.lastBulkErr=null;
+      const res=await bulkSave(results.map(rec=>({c,rec})),(n,t)=>{ const p=$('#impProg'); if(p) p.textContent=`Salvataggio ${n} di ${t}…`; });
+      closeModal();
+      toast(res.failed?`Importate ${res.done} righe, ${res.failed} non salvate. ${S.lastBulkErr||''}`:`Importate ${res.done} righe`, res.failed?'bad':'');
+    };
+  });
+}
+
+/* ---------------- JSON backup ---------------- */
+function backup(){
+  const o={app:'SMM Business CRM',version:1,exportedAt:nowISO()}; COLLS.forEach(c=>o[c]=all(c));
+  const n=COLLS.reduce((s,c)=>s+o[c].length,0);
+  if(!n){ toast('Non ci sono ancora dati da salvare','bad'); return; }
+  offerFile(`smm-crm-backup-${stamp()}.json`,JSON.stringify(o,null,2),'application/json');
+}
+function restore(){
+  pickFile('.json,application/json',(text)=>{
+    let o; try{ o=JSON.parse(text); }catch(e){ toast('Il file non è un backup JSON valido','bad'); return; }
+    if(!o||typeof o!=='object'||!COLLS.some(c=>Array.isArray(o[c]))){ toast('Il file non contiene dati del CRM','bad'); return; }
+    const items=[]; COLLS.forEach(c=>(o[c]||[]).forEach(r=>{ if(r&&typeof r==='object'){ const rec=clone(r); if(!rec.id||!/^[A-Za-z0-9_.~:@+-]{1,120}$/.test(rec.id)||rec.id==='.'||rec.id==='..') rec.id=uid(); items.push({c,rec}); } }));
+    const counts=COLLS.map(c=>`${SCHEMA[c].name}: ${(o[c]||[]).length}`).join(' · ');
+    const m=openModal({title:'Ripristina backup',body:`<p style="margin:0 0 10px">Il file contiene ${items.length} record.<br><span class="cell-sub">${esc(counts)}${o.exportedAt?' · esportato il '+new Date(o.exportedAt).toLocaleString('it-IT'):''}</span></p>
+      <label style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px"><input type="radio" name="rmode" value="merge" checked> <span><b>Unisci</b><br><span class="cell-sub">Aggiunge i record e aggiorna quelli con lo stesso identificativo. Non elimina nulla.</span></span></label>
+      <label style="display:flex;gap:8px;align-items:flex-start"><input type="radio" name="rmode" value="replace"> <span><b>Sostituisci tutto</b><br><span class="cell-sub">Elimina i dati attuali e li sostituisce con quelli del backup.</span></span></label>
+      <p class="cell-sub" id="impProg" style="margin:10px 0 0"></p>`,
+      footer:`<button class="btn" data-m="close">Annulla</button><button class="btn primary" data-m="go">Ripristina</button>`});
+    const f=m.parentElement; $('[data-m="close"]',f).onclick=closeModal;
+    $('[data-m="go"]',f).onclick=async(e)=>{
+      e.target.disabled=true; const mode=$('input[name="rmode"]:checked',f).value;
+      if(mode==='replace'){ for(const c of COLLS){ for(const r of all(c)){ try{ await delRec(c,r.id); }catch(err){ closeModal(); return; } } } }
+      S.lastBulkErr=null;
+      const res=await bulkSave(items,(n,t)=>{ const p=$('#impProg'); if(p) p.textContent=`Ripristino ${n} di ${t}…`; });
+      closeModal(); toast(res.failed?`Ripristinati ${res.done} record, ${res.failed} non salvati. ${S.lastBulkErr||''}`:`Ripristinati ${res.done} record`,res.failed?'bad':'');
+    };
+  });
+}
+async function migrateLocal(){
+  const o=lsRead(); if(!o) return;
+  const items=[]; COLLS.forEach(c=>(o[c]||[]).forEach(r=>{ if(r&&r.id&&!get(c,r.id)) items.push({c,rec:clone(r)}); }));
+  if(!items.length){ toast('Tutti i record locali sono già nell\'archivio'); return; }
+  const res=await bulkSave(items);
+  toast(res.failed?`Copiati ${res.done} record, ${res.failed} non riusciti`:`Copiati ${res.done} record nell'archivio online`,res.failed?'bad':'');
+}
+function wipe(){
+  const extra=`<label style="display:block;margin-top:12px;font-size:13px">Scrivi <b>ELIMINA</b> per confermare<input class="input" name="word" style="width:100%;margin-top:6px" autocomplete="off"></label>`;
+  confirmBox({title:'Eliminare tutti i dati?',text:'Tutti contatti, follow-up, appuntamenti, preventivi e clienti verranno cancellati definitivamente.',ok:'Elimina tutto',danger:true,extra,onOk:async(v)=>{
+    if((v.word||'').trim().toUpperCase()!=='ELIMINA'){ toast('Conferma non valida: nessun dato eliminato','bad'); return; }
+    let n=0; for(const c of COLLS){ for(const r of all(c)){ try{ await delRec(c,r.id); n++; }catch(e){ return; } } }
+    UI.drawer=null; toast(`Eliminati ${n} record`);
+  }});
+}
+
+/* ---------------- Global search ---------------- */
+let srSel=-1, srItems=[];
+function runSearch(q){
+  const box=$('#searchResults'); q=norm(q);
+  if(q.length<2){ box.hidden=true; srItems=[]; return; }
+  const hit=(...v)=>norm(v.join(' ')).includes(q);
+  const groups=[
+    ['Contatti',all('contacts').filter(c=>hit(c.company,c.contactName,c.email,c.phone,c.sector,c.location,c.instagram,c.website,c.notes)).slice(0,8).map(c=>({act:'openContact',id:c.id,t:c.company,s:[c.contactName,stageLabel(c.stage),c.location].filter(Boolean).join(' · '),i:'users'}))],
+    ['Clienti acquisiti',all('clients').filter(c=>hit(c.company,c.contactName,c.services,c.vat,c.email)).slice(0,5).map(c=>({act:'openClient',id:c.id,t:c.company,s:c.services+' · '+money(c.agreedAmount),i:'brief'}))],
+    ['Preventivi',all('quotes').filter(x=>hit(contactName(x.contactId),x.service,x.number,x.notes)).slice(0,5).map(x=>({act:'edit',c:'quotes',id:x.id,t:contactName(x.contactId)+' · '+(x.service||''),s:money(x.amount)+' · '+lbl(Q_STATUS,x.status),i:'file'}))],
+    ['Follow-up',all('followups').filter(x=>hit(contactName(x.contactId),x.description,x.type)).slice(0,5).map(x=>({act:'edit',c:'followups',id:x.id,t:(x.type||'')+' · '+contactName(x.contactId),s:fmtDate(x.date)+' · '+lbl(FU_STATUS,x.status),i:'bell'}))],
+    ['Appuntamenti',all('appointments').filter(x=>hit(contactName(x.contactId),x.notes,x.outcome,x.meetingType,x.place)).slice(0,5).map(x=>({act:'edit',c:'appointments',id:x.id,t:contactName(x.contactId),s:fmtDate(x.date)+' '+(x.time||'')+' · '+lbl(AP_STATUS,x.status),i:'cal'}))],
+  ].filter(g=>g[1].length);
+  srItems=groups.flatMap(g=>g[1]); srSel=srItems.length?0:-1;
+  let k=0;
+  box.innerHTML=groups.length?groups.map(([n,items])=>`<div class="sr-group">${n}</div>`+items.map(it=>`<button class="sr-item ${k===srSel?'sel':''}" data-k="${k++}">${icon(it.i)}<span style="min-width:0"><span>${esc(it.t)}</span><small>${esc(it.s)}</small></span></button>`).join('')).join(''):`<div class="empty" style="padding:18px">Nessun risultato per “${esc(q)}”</div>`;
+  box.hidden=false;
+}
+function srOpen(it){
+  $('#searchResults').hidden=true; $('#globalSearch').value=''; $('#globalSearch').blur();
+  if(it.act==='openContact') openDrawer('contact',it.id);
+  else if(it.act==='openClient') openDrawer('client',it.id);
+  else openForm(it.c,it.id);
+}
+
+/* ---------------- Drawer open ---------------- */
+function openDrawer(type,id){ UI.drawer={type,id}; renderDrawer(); }
+
+/* ---------------- Events ---------------- */
+document.addEventListener('click',async e=>{
+  const sr=e.target.closest('.sr-item'); if(sr){ srOpen(srItems[+sr.dataset.k]); return; }
+  if(!e.target.closest('#searchBox')) $('#searchResults').hidden=true;
+  if(!e.target.closest('#newBtn')&&!e.target.closest('#newMenu')) $('#newMenu').hidden=true;
+  const t=e.target.closest('[data-act]'); if(!t) return;
+  const a=t.dataset.act, id=t.dataset.id, c=t.dataset.c;
+  if(a==='closeDrawerBg'){ if(e.target===t){ UI.drawer=null; renderDrawer(); } return; }
+  if(t.tagName==='A'&&a!=='closeDrawerBg') e.preventDefault();
+  e.stopPropagation();
+  switch(a){
+    case 'new': { const pre={}; if(t.dataset.contact) pre.contactId=t.dataset.contact; if(t.dataset.date) pre.date=t.dataset.date; openForm(c,null,pre); break; }
+    case 'edit': openForm(c,id); break;
+    case 'del': askDelete(c,id); break;
+    case 'delContact': askDeleteContact(id); break;
+    case 'openContact': if(get('contacts',id)) openDrawer('contact',id); break;
+    case 'openClient': openDrawer('client',id); break;
+    case 'closeDrawer': UI.drawer=null; renderDrawer(); break;
+    case 'sort': { const st=UI[t.dataset.view]; const k=t.dataset.key; if(st.sort===k) st.dir=st.dir==='asc'?'desc':'asc'; else { st.sort=k; st.dir=/Date|amount|Amount|potential|budget|deposit|balance|out/.test(k)?'desc':'asc'; } scheduleRender(); break; }
+    case 'clearFilters': Object.assign(UI.contacts,{q:'',sector:'',stage:'',source:''}); scheduleRender(); break;
+    case 'stageStep': { const ct=get('contacts',id); if(!ct) break; const i=SIDX[ct.stage]+(+t.dataset.dir); if(i>=0&&i<STAGES.length) moveStage(id,STAGES[i].k); break; }
+    case 'fuTab': UI.followups.tab=t.dataset.tab; scheduleRender(); break;
+    case 'qTab': UI.quotes.status=t.dataset.st; scheduleRender(); break;
+    case 'fuStatus': { const f=get('followups',id); if(!f) break; try{ await saveRec('followups',Object.assign({},f,{status:t.dataset.st}));
+        if(t.dataset.st==='completato'){ const ct=get('contacts',f.contactId); const day=f.date<=todayISO()?f.date:todayISO(); if(ct&&(!ct.lastContact||ct.lastContact<day)) await saveRec('contacts',Object.assign({},ct,{lastContact:day}),{silent:true});
+          toast('Follow-up completato','',{label:'Programma il prossimo',fn:()=>openForm('followups',null,{contactId:f.contactId,date:addDays(todayISO(),7),type:f.type})}); }
+        else toast(t.dataset.st==='annullato'?'Follow-up annullato':'Follow-up riaperto'); }catch(err){} break; }
+    case 'calNav': { const d=+t.dataset.d; if(!d) UI.appointments.month=todayISO().slice(0,7); else { const [y,m]=UI.appointments.month.split('-').map(Number); const x=new Date(y,m-1+d,1); UI.appointments.month=x.getFullYear()+'-'+pad(x.getMonth()+1); } scheduleRender(); break; }
+    case 'calDay': openForm('appointments',null,{date:t.dataset.date}); break;
+    case 'openDue': { const k=t.dataset.kind; if(k==='fu') openForm('followups',id); else if(k==='ap') openForm('appointments',id); else if(k==='q') openForm('quotes',id); else openDrawer('contact',id); break; }
+    case 'quoteToClient': { const q=get('quotes',id); if(!q) break; const ct=get('contacts',q.contactId); openForm('clients',null,{contactId:q.contactId,company:ct?ct.company:'',contactName:ct?ct.contactName||'':'',email:ct?ct.email||'':'',phone:ct?ct.phone||'':'',services:q.service||'',agreedAmount:q.amount,quoteId:q.id}); break; }
+    case 'clientFromContact': openClientFromContact(id); break;
+    case 'touch': { const ct=get('contacts',id); if(!ct) break; const rec=Object.assign({},ct,{lastContact:todayISO()}); if(SIDX[ct.stage]<2){ rec.stage='contattato'; rec.stageHistory=[...(ct.stageHistory||[]),{stage:'contattato',at:nowISO(),from:ct.stage}]; } try{ await saveRec('contacts',rec); toast('Ultimo contatto aggiornato a oggi'+(rec.stage!==ct.stage?' · fase: Contattato':'')); }catch(err){} break; }
+    case 'copy': copyText(t.dataset.v); break;
+    case 'export': exportCSV(c,t.dataset.filtered); break;
+    case 'template': exportTemplate(c); break;
+    case 'import': importCSV(c); break;
+    case 'backup': backup(); break;
+    case 'restore': restore(); break;
+    case 'migrateLocal': migrateLocal(); break;
+    case 'clearLocal': confirmBox({title:'Eliminare la copia locale?',text:'Verranno cancellati solo i dati salvati in questo browser, non quelli dell\'archivio online.',ok:'Elimina copia locale',danger:true,onOk:()=>{ try{ localStorage.removeItem(LS_KEY); }catch(e){} toast('Copia locale eliminata'); scheduleRender(); }}); break;
+    case 'wipe': wipe(); break;
+  }
+});
+document.addEventListener('input',e=>{
+  const b=e.target.dataset&&e.target.dataset.bind; if(!b) return;
+  const [v,k]=b.split('.'); UI[v][k]=e.target.value; scheduleRender();
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.actChange==='setStage'){ moveStage(t.dataset.id,t.value); return; }
+  const b=t.dataset&&t.dataset.bind; if(b&&t.tagName==='SELECT'){ const [v,k]=b.split('.'); UI[v][k]=t.value; scheduleRender(); }
+});
+// Drag & drop on kanban
+let dragId=null;
+document.addEventListener('dragstart',e=>{ const k=e.target.closest&&e.target.closest('.kc'); if(!k) return; dragId=k.dataset.id; k.classList.add('dragging'); try{ e.dataTransfer.setData('text/plain',dragId); e.dataTransfer.effectAllowed='move'; }catch(err){} });
+document.addEventListener('dragend',e=>{ $$('.kc.dragging').forEach(x=>x.classList.remove('dragging')); $$('.col.over').forEach(x=>x.classList.remove('over')); dragId=null; });
+document.addEventListener('dragover',e=>{ const col=e.target.closest&&e.target.closest('.col'); if(!col||!dragId) return; e.preventDefault(); $$('.col.over').forEach(x=>{ if(x!==col) x.classList.remove('over'); }); col.classList.add('over'); });
+document.addEventListener('drop',e=>{ const col=e.target.closest&&e.target.closest('.col'); if(!col) return; e.preventDefault(); let id=dragId; try{ id=e.dataTransfer.getData('text/plain')||id; }catch(err){} col.classList.remove('over'); if(id) moveStage(id,col.dataset.stage); dragId=null; });
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if($('#confirmRoot').innerHTML){ $('#confirmRoot').innerHTML=''; return; }
+    if($('#modalRoot').innerHTML){ closeModal(); return; }
+    if(UI.drawer){ UI.drawer=null; renderDrawer(); return; }
+    $('#searchResults').hidden=true; closeSide();
+  }
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(e.key==='/'&&!['input','textarea','select'].includes(tag)){ e.preventDefault(); $('#globalSearch').focus(); }
+  if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('kc')){ openDrawer('contact',e.target.dataset.id); }
+});
+const gs=$('#globalSearch');
+gs.addEventListener('input',()=>runSearch(gs.value));
+gs.addEventListener('focus',()=>{ if(gs.value) runSearch(gs.value); });
+gs.addEventListener('keydown',e=>{
+  if(!srItems.length) return;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); srSel=(srSel+(e.key==='ArrowDown'?1:-1)+srItems.length)%srItems.length; $$('.sr-item').forEach((b,i)=>b.classList.toggle('sel',i===srSel)); const s=$('.sr-item.sel'); s&&s.scrollIntoView({block:'nearest'}); }
+  if(e.key==='Enter'&&srSel>=0){ e.preventDefault(); srOpen(srItems[srSel]); }
+});
+// Tooltip
+const tip=$('#tip');
+document.addEventListener('mousemove',e=>{
+  const t=e.target.closest&&e.target.closest('[data-tip]');
+  if(!t){ tip.hidden=true; return; }
+  tip.innerHTML=t.getAttribute('data-tip'); tip.hidden=false;
+  const w=tip.offsetWidth, h=tip.offsetHeight; let x=e.clientX+14, y=e.clientY+14;
+  if(x+w>innerWidth-8) x=e.clientX-w-14; if(y+h>innerHeight-8) y=e.clientY-h-14;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+});
+document.addEventListener('scroll',()=>{ tip.hidden=true; },true);
+// New menu & side nav
+$('#newIco').innerHTML=icon('plus'); $('#searchIcon').outerHTML=icon('search'); $('#menuBtn').innerHTML=icon('menu');
+$('#newMenu').innerHTML=[['contacts','users','Contatto / lead'],['followups','bell','Follow-up'],['appointments','cal','Appuntamento'],['quotes','file','Preventivo'],['clients','brief','Cliente acquisito']].map(([c,i,l])=>`<button data-act="new" data-c="${c}">${icon(i)}${l}</button>`).join('');
+$('#newBtn').addEventListener('click',e=>{ e.stopPropagation(); $('#newMenu').hidden=!$('#newMenu').hidden; });
+$('#newMenu').addEventListener('click',()=>{ $('#newMenu').hidden=true; });
+function closeSide(){ $('#side').classList.remove('open'); $('#sideBackdrop').classList.remove('open'); }
+$('#menuBtn').addEventListener('click',()=>{ $('#side').classList.add('open'); $('#sideBackdrop').classList.add('open'); });
+$('#sideBackdrop').addEventListener('click',closeSide);
+$('#nav').addEventListener('click',e=>{ if(e.target.closest('a')) closeSide(); });
+
+/* ---------------- Router ---------------- */
+function route(){
+  const h=(location.hash||'').replace('#','');
+  UI.view=VIEWS.some(v=>v.k===h)?h:'dashboard';
+  scheduleRender();
+  const v=$('#view'); if(v) window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+let rz=0; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(UI.view==='dashboard') drawCharts(); },150); });
+function afterRender(){ if(UI.view==='dashboard') drawCharts(); }
+// Refresh relative dates every minute (overdue status) without writing anything
+setInterval(()=>{ if(!$('#modalRoot').innerHTML && !document.activeElement.matches('input,textarea,select')) scheduleRender(); },60000);
+
+route();
+initStore();
+})();
+</script>
